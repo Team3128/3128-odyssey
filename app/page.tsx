@@ -4,7 +4,7 @@ export default function OdysseyPage() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* Navbar */}
-      <nav className="bg-navy-600 text-white px-6 py-4 flex justify-between items-center shadow-md">
+      <nav className="bg-blue-600 text-white px-6 py-4 flex justify-between items-center shadow-md">
         <h1 className="text-xl font-bold">Odyssey</h1>
         <div className="space-x-4">
           <Link href="/" className="hover:underline">
