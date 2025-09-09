@@ -1,3 +1,4 @@
+// not using since this opens each md file preview in a new url, keeping this file just in case
 "use client";
 
 import { useEffect, useState } from "react";
@@ -31,4 +32,4 @@ export default function DocPage() {
   );
 }
 
-
+export {}; //makes narask not use this way of opening md files, trying to make inline expansion happen within NARASK page itself
