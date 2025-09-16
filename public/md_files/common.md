@@ -34,6 +34,7 @@ __Code reviewing__
 
 - EVERYONE can code review, in fact it is encouraged
   - However, this does not entail that you are allowed to accept pull requests
+
 - Being a Request Manager
   - Software Lead + Dept Coord
   - Experienced upperclassmen, project-lead
