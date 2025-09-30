@@ -15,7 +15,9 @@ import {
   Activity,
   Thermometer,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Home,
+  Waves
 } from 'lucide-react';
 
 interface BatteryRecord {
@@ -368,11 +370,11 @@ export default function NARPitDashboard() {
   const getBatteryStatusColor = (battery: BatteryRecord) => {
     const hoursAgo = (Date.now() - battery.timestamp) / (1000 * 60 * 60);
     
-    if (hoursAgo > 2) return 'text-yellow-600';
-    if (battery.voltage < 11.8) return 'text-red-600';
-    if (battery.temperature > 50) return 'text-red-600';
-    if (battery.voltage < 12.0 || battery.temperature > 45) return 'text-yellow-600';
-    return 'text-green-600';
+    if (hoursAgo > 2) return 'text-yellow-400';
+    if (battery.voltage < 11.8) return 'text-red-400';
+    if (battery.temperature > 50) return 'text-red-400';
+    if (battery.voltage < 12.0 || battery.temperature > 45) return 'text-yellow-400';
+    return 'text-cyan-400';
   };
 
   const getBatteryStatus = (battery: BatteryRecord) => {
@@ -550,12 +552,12 @@ export default function NARPitDashboard() {
     <button
       onClick={() => !disabled && setActiveTab(id)}
       disabled={disabled}
-      className={`flex items-center gap-2 px-4 py-2 rounded-lg transition ${
+      className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all transform hover:scale-105 ${
         disabled 
-          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+          ? 'bg-gray-700 text-gray-500 cursor-not-allowed opacity-50'
           : activeTab === id 
-            ? 'bg-blue-600 text-white' 
-            : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+            ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/50' 
+            : 'bg-slate-700 hover:bg-slate-600 text-cyan-400 hover:text-cyan-300'
       }`}
     >
       <Icon size={20} />
@@ -564,20 +566,36 @@ export default function NARPitDashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 py-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+      <div className="bg-gradient-to-r from-slate-800 to-blue-900 shadow-2xl border-b-4 border-cyan-500">
+        <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold text-gray-900">NARPit Dashboard</h1>
+            <div className="flex items-center gap-4">
+              <a href="/" className="flex items-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 rounded-lg transition-all transform hover:scale-105 shadow-lg cursor-pointer">
+                <Home size={20} className="text-white" />
+                <span className="text-white font-bold">Home</span>
+              </a>
+              <div className="flex items-center gap-3">
+                <Waves className="text-cyan-400" size={40} />
+                <div>
+                  <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+                    NARPit Dashboard
+                  </h1>
+                  <p className="text-cyan-300 text-sm font-semibold">Team 3128 • Aluminum Narwhals</p>
+                </div>
+              </div>
+            </div>
             <div className="flex items-center gap-4">
               {isSetupComplete && (
                 <>
-                  <div className="flex items-center gap-2">
-                    <Wifi className={isLive ? 'text-green-500' : 'text-red-500'} size={20} />
+                  <div className="flex items-center gap-2 bg-slate-800/50 rounded-lg px-3 py-2">
+                    <Wifi className={isLive ? 'text-green-400' : 'text-red-400'} size={20} />
                     <button
                       onClick={toggleLiveUpdates}
-                      className={`px-3 py-1 rounded text-sm font-medium transition ${
-                        isLive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                      className={`px-4 py-1 rounded-md text-sm font-bold transition-all transform hover:scale-105 ${
+                        isLive 
+                          ? 'bg-green-500 hover:bg-green-600 text-white shadow-lg shadow-green-500/50' 
+                          : 'bg-red-500 hover:bg-red-600 text-white shadow-lg shadow-red-500/50'
                       }`}
                     >
                       {isLive ? 'LIVE' : 'OFFLINE'}
@@ -586,19 +604,21 @@ export default function NARPitDashboard() {
                   <button
                     onClick={loadAllData}
                     disabled={isLoading}
-                    className="flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm font-medium hover:bg-blue-200 transition disabled:opacity-50"
+                    className="flex items-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-semibold transition-all transform hover:scale-105 disabled:opacity-50 shadow-lg"
                   >
                     <RefreshCw size={16} className={isLoading ? 'animate-spin' : ''} />
                     Refresh
                   </button>
                 </>
               )}
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-cyan-300 bg-slate-800/50 rounded-lg px-4 py-2">
                 {isSetupComplete && (
-                  <>Event: {eventKey} | Team: {teamNumber}</>
+                  <div className="font-semibold">
+                    Event: <span className="text-white">{eventKey}</span> | Team: <span className="text-white">{teamNumber}</span>
+                  </div>
                 )}
                 {lastUpdate && (
-                  <div className="text-xs text-gray-500">
+                  <div className="text-xs text-cyan-400">
                     Last updated: {lastUpdate.toLocaleTimeString()}
                   </div>
                 )}
@@ -608,8 +628,8 @@ export default function NARPitDashboard() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-4">
-        <div className="flex gap-2 mb-6 overflow-x-auto">
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="flex gap-3 mb-6 overflow-x-auto pb-2">
           <TabButton id="setup" label="Setup" icon={Zap} />
           <TabButton id="overview" label="Overview" icon={Trophy} disabled={!isSetupComplete} />
           <TabButton id="matches" label="Live Matches" icon={Clock} disabled={!isSetupComplete} />
@@ -619,13 +639,19 @@ export default function NARPitDashboard() {
         </div>
 
         {activeTab === 'setup' && (
-          <div className="bg-white rounded-lg shadow p-8">
+          <div className="bg-gradient-to-br from-slate-800 to-blue-900 rounded-2xl shadow-2xl p-8 border-2 border-cyan-500/30">
             <div className="max-w-2xl mx-auto">
-              <h2 className="text-2xl font-bold text-center mb-8">Competition Setup</h2>
+              <div className="text-center mb-8">
+                <Waves className="w-16 h-16 text-cyan-400 mx-auto mb-4" />
+                <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+                  Competition Setup
+                </h2>
+                <p className="text-cyan-300 mt-2">Configure your event and team information</p>
+              </div>
               
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-bold text-cyan-400 mb-2">
                     Competition Key
                   </label>
                   <input
@@ -633,13 +659,13 @@ export default function NARPitDashboard() {
                     value={eventKey}
                     onChange={(e) => setEventKey(e.target.value)}
                     placeholder="e.g., 2025galileo"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 bg-slate-900 border-2 border-cyan-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-white placeholder-cyan-700"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Find event keys on The Blue Alliance</p>
+                  <p className="text-xs text-cyan-400 mt-1">Find event keys on The Blue Alliance</p>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-bold text-cyan-400 mb-2">
                     Team Number
                   </label>
                   <input
@@ -647,16 +673,23 @@ export default function NARPitDashboard() {
                     value={teamNumber}
                     onChange={(e) => setTeamNumber(e.target.value)}
                     placeholder="e.g., 3128"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 bg-slate-900 border-2 border-cyan-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-white placeholder-cyan-700"
                   />
                 </div>
 
                 <button
                   onClick={handleStartCompetition}
                   disabled={!isSetupComplete || isLoading}
-                  className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-bold text-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white py-4 px-6 rounded-xl font-bold text-xl transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-2xl shadow-cyan-500/50"
                 >
-                  {isLoading ? 'Loading...' : 'EMBARK!'}
+                  {isLoading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <RefreshCw className="animate-spin" size={24} />
+                      Loading...
+                    </span>
+                  ) : (
+                    'EMBARK!'
+                  )}
                 </button>
               </div>
             </div>
@@ -665,109 +698,109 @@ export default function NARPitDashboard() {
 
         {activeTab === 'overview' && isSetupComplete && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <Trophy className="text-yellow-500" />
+            <div className="bg-gradient-to-br from-slate-800 to-blue-900 p-6 rounded-2xl shadow-2xl border-2 border-cyan-500/30 transform hover:scale-105 transition-all">
+              <h3 className="text-lg font-bold mb-4 flex items-center gap-2 text-cyan-400">
+                <Trophy className="text-yellow-400" />
                 Team Ranking
               </h3>
               {teamRanking ? (
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600">
+                  <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
                     #{teamRanking.rank}
                   </div>
-                  <div className="text-gray-600">Current Rank</div>
-                  <div className="text-sm text-gray-500 mt-2">
+                  <div className="text-cyan-300 font-semibold">Current Rank</div>
+                  <div className="text-sm text-cyan-400 mt-2 font-semibold">
                     {teamRanking.record.wins}-{teamRanking.record.losses}-{teamRanking.record.ties}
                   </div>
                 </div>
               ) : (
-                <div className="text-gray-500 text-center">No ranking data available</div>
+                <div className="text-cyan-500 text-center">No ranking data available</div>
               )}
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <Zap className="text-purple-500" />
+            <div className="bg-gradient-to-br from-slate-800 to-blue-900 p-6 rounded-2xl shadow-2xl border-2 border-cyan-500/30 transform hover:scale-105 transition-all">
+              <h3 className="text-lg font-bold mb-4 flex items-center gap-2 text-cyan-400">
+                <Zap className="text-purple-400" />
                 Team EPA
               </h3>
               <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600">
+                <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">
                   {teamEPA.overall}
                 </div>
-                <div className="text-gray-600">
+                <div className="text-cyan-300 font-semibold">
                   {teamEPA.source === 'statbotics' ? 'Statbotics EPA' : 'Estimated EPA'}
                 </div>
-                <div className="text-xs text-gray-500 mt-2">
+                <div className="text-xs text-cyan-400 mt-2 font-medium">
                   Auto: {teamEPA.auto} | Teleop: {teamEPA.teleop} | End: {teamEPA.endgame}
                 </div>
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <Battery className="text-green-500" />
+            <div className="bg-gradient-to-br from-slate-800 to-blue-900 p-6 rounded-2xl shadow-2xl border-2 border-cyan-500/30 transform hover:scale-105 transition-all">
+              <h3 className="text-lg font-bold mb-4 flex items-center gap-2 text-cyan-400">
+                <Battery className="text-green-400" />
                 Battery Status
               </h3>
               <div className="space-y-2">
                 {Object.keys(batteryStats).length > 0 ? Object.entries(batteryStats).slice(0, 3).map(([id, stats]: [string, any]) => (
-                  <div key={id} className="flex justify-between items-center">
-                    <span className="text-sm">{id}</span>
-                    <span className={`text-sm font-medium ${
-                      stats.status === 'critical' ? 'text-red-600' : 
-                      stats.status === 'warning' ? 'text-yellow-600' : 'text-green-600'
+                  <div key={id} className="flex justify-between items-center bg-slate-900/50 rounded-lg px-3 py-2">
+                    <span className="text-sm font-semibold text-cyan-300">{id}</span>
+                    <span className={`text-sm font-bold ${
+                      stats.status === 'critical' ? 'text-red-400' : 
+                      stats.status === 'warning' ? 'text-yellow-400' : 'text-green-400'
                     }`}>
                       {stats.currentVoltage.toFixed(1)}V
                     </span>
                   </div>
                 )) : (
-                  <div className="text-gray-500 text-center">No battery data</div>
+                  <div className="text-cyan-500 text-center">No battery data</div>
                 )}
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <Clock className="text-blue-500" />
+            <div className="bg-gradient-to-br from-slate-800 to-blue-900 p-6 rounded-2xl shadow-2xl border-2 border-cyan-500/30 transform hover:scale-105 transition-all">
+              <h3 className="text-lg font-bold mb-4 flex items-center gap-2 text-cyan-400">
+                <Clock className="text-blue-400" />
                 Next Match
               </h3>
               {nextMatch ? (
                 <div className="text-center">
-                  <div className="text-xl font-bold">
+                  <div className="text-2xl font-bold text-white">
                     Match {nextMatch.match_number}
                   </div>
-                  <div className="text-gray-600">{nextMatch.comp_level.toUpperCase()}</div>
-                  <div className="text-sm text-gray-500 mt-2">
+                  <div className="text-cyan-300 font-semibold">{nextMatch.comp_level.toUpperCase()}</div>
+                  <div className="text-sm text-cyan-400 mt-2 font-medium">
                     {nextMatch.time ? formatTime(nextMatch.time) : 'Time TBD'}
                   </div>
                 </div>
               ) : (
-                <div className="text-gray-500 text-center">No upcoming matches</div>
+                <div className="text-cyan-500 text-center">No upcoming matches</div>
               )}
             </div>
           </div>
         )}
 
         {activeTab === 'matches' && isSetupComplete && (
-          <div className="bg-white rounded-lg shadow">
-            <div className="p-6 border-b">
+          <div className="bg-gradient-to-br from-slate-800 to-blue-900 rounded-2xl shadow-2xl border-2 border-cyan-500/30">
+            <div className="p-6 border-b border-cyan-500/30">
               <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold">Live Match Updates</h2>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  {isLive && <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>}
+                <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Live Match Updates</h2>
+                <div className="flex items-center gap-2 text-sm text-cyan-300 font-semibold">
+                  {isLive && <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>}
                   Auto-updating: {isLive ? 'ON' : 'OFF'}
                 </div>
               </div>
             </div>
-            <div className="p-6">
+            <div className="p-6 max-h-[600px] overflow-y-auto">
               {matches && matches.length > 0 ? matches.slice(0, 15).map(match => (
-                <div key={match.key} className="border-b last:border-b-0 py-4">
-                  <div className="flex justify-between items-center mb-2">
-                    <div className="font-semibold">
+                <div key={match.key} className="border-b border-cyan-500/20 last:border-b-0 py-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <div className="font-bold text-cyan-400">
                       {match.comp_level.toUpperCase()} {match.match_number}
                     </div>
-                    <div className="text-sm text-gray-500">
+                    <div className="text-sm text-cyan-300 font-medium">
                       {match.actual_time ? (
-                        <span className="text-green-600">Completed: {formatTime(match.actual_time)}</span>
+                        <span className="text-green-400 font-semibold">Completed: {formatTime(match.actual_time)}</span>
                       ) : match.time ? (
                         <span>Scheduled: {formatTime(match.time)}</span>
                       ) : (
@@ -776,35 +809,35 @@ export default function NARPitDashboard() {
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className={`p-3 rounded ${
+                    <div className={`p-4 rounded-xl ${
                       match.winning_alliance === 'red' 
-                        ? 'bg-red-100 border-2 border-red-300' 
-                        : 'bg-red-50'
+                        ? 'bg-red-900/80 border-2 border-red-400 shadow-lg shadow-red-500/30' 
+                        : 'bg-red-900/40 border border-red-700/50'
                     }`}>
-                      <div className="flex justify-between items-center mb-1">
-                        <div className="font-medium text-red-700">Red Alliance</div>
-                        <div className="font-bold text-red-700">
+                      <div className="flex justify-between items-center mb-2">
+                        <div className="font-bold text-red-300">Red Alliance</div>
+                        <div className="font-bold text-2xl text-red-200">
                           {match.alliances?.red?.score || 0}
                         </div>
                       </div>
-                      <div className="text-sm">
+                      <div className="text-sm text-red-200 font-medium">
                         {match.alliances?.red?.team_keys?.map(key => 
                           key.replace('frc', '')
                         ).join(', ') || 'Teams TBD'}
                       </div>
                     </div>
-                    <div className={`p-3 rounded ${
+                    <div className={`p-4 rounded-xl ${
                       match.winning_alliance === 'blue' 
-                        ? 'bg-blue-100 border-2 border-blue-300' 
-                        : 'bg-blue-50'
+                        ? 'bg-blue-900/80 border-2 border-blue-400 shadow-lg shadow-blue-500/30' 
+                        : 'bg-blue-900/40 border border-blue-700/50'
                     }`}>
-                      <div className="flex justify-between items-center mb-1">
-                        <div className="font-medium text-blue-700">Blue Alliance</div>
-                        <div className="font-bold text-blue-700">
+                      <div className="flex justify-between items-center mb-2">
+                        <div className="font-bold text-blue-300">Blue Alliance</div>
+                        <div className="font-bold text-2xl text-blue-200">
                           {match.alliances?.blue?.score || 0}
                         </div>
                       </div>
-                      <div className="text-sm">
+                      <div className="text-sm text-blue-200 font-medium">
                         {match.alliances?.blue?.team_keys?.map(key => 
                           key.replace('frc', '')
                         ).join(', ') || 'Teams TBD'}
@@ -813,10 +846,10 @@ export default function NARPitDashboard() {
                   </div>
                 </div>
               )) : (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-12 text-cyan-400">
                   <Clock size={48} className="mx-auto mb-4 opacity-50" />
-                  <p>No match data available</p>
-                  <p className="text-sm">Check your event key and try refreshing</p>
+                  <p className="font-semibold text-lg">No match data available</p>
+                  <p className="text-sm text-cyan-500">Check your event key and try refreshing</p>
                 </div>
               )}
             </div>
@@ -824,48 +857,48 @@ export default function NARPitDashboard() {
         )}
 
         {activeTab === 'rankings' && isSetupComplete && (
-          <div className="bg-white rounded-lg shadow">
-            <div className="p-6 border-b">
-              <h2 className="text-xl font-semibold">Event Rankings</h2>
+          <div className="bg-gradient-to-br from-slate-800 to-blue-900 rounded-2xl shadow-2xl border-2 border-cyan-500/30">
+            <div className="p-6 border-b border-cyan-500/30">
+              <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Event Rankings</h2>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50">
+                <thead className="bg-slate-900/50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Rank</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Team</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Record (W-L-T)</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Avg Score</th>
+                    <th className="px-6 py-3 text-left text-xs font-bold text-cyan-400 uppercase">Rank</th>
+                    <th className="px-6 py-3 text-left text-xs font-bold text-cyan-400 uppercase">Team</th>
+                    <th className="px-6 py-3 text-left text-xs font-bold text-cyan-400 uppercase">Record (W-L-T)</th>
+                    <th className="px-6 py-3 text-left text-xs font-bold text-cyan-400 uppercase">Avg Score</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="divide-y divide-cyan-500/20">
                   {rankings && rankings.length > 0 ? rankings.slice(0, 30).map(ranking => (
                     <tr 
                       key={ranking.team_key} 
-                      className={ranking.team_key === `frc${teamNumber}` ? 'bg-blue-50 border-l-4 border-blue-500' : ''}
+                      className={ranking.team_key === `frc${teamNumber}` ? 'bg-cyan-900/50 border-l-4 border-cyan-400' : 'hover:bg-slate-800/50'}
                     >
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-cyan-300">
                         {ranking.rank}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-white">
                         {ranking.team_key.replace('frc', '')}
                         {ranking.team_key === `frc${teamNumber}` && (
-                          <span className="ml-2 px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">YOU</span>
+                          <span className="ml-2 px-2 py-1 text-xs bg-cyan-500 text-white rounded font-bold">YOU</span>
                         )}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-cyan-300 font-semibold">
                         {ranking.record.wins}-{ranking.record.losses}-{ranking.record.ties}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-cyan-300 font-semibold">
                         {ranking.qual_average?.toFixed(1) || 'N/A'}
                       </td>
                     </tr>
                   )) : (
                     <tr>
-                      <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
+                      <td colSpan={4} className="px-6 py-12 text-center text-cyan-400">
                         <Trophy size={48} className="mx-auto mb-4 opacity-50" />
-                        <p>No ranking data available</p>
-                        <p className="text-sm">Check your event key and try refreshing</p>
+                        <p className="font-semibold text-lg">No ranking data available</p>
+                        <p className="text-sm text-cyan-500">Check your event key and try refreshing</p>
                       </td>
                     </tr>
                   )}
@@ -877,15 +910,15 @@ export default function NARPitDashboard() {
 
         {activeTab === 'battery' && (
           <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-xl font-semibold mb-4">Add Battery Record</h2>
+            <div className="bg-gradient-to-br from-slate-800 to-blue-900 rounded-2xl shadow-2xl p-6 border-2 border-cyan-500/30">
+              <h2 className="text-2xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Add Battery Record</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <input
                   type="text"
                   placeholder="Battery ID (required)"
                   value={newBattery.batteryId}
                   onChange={(e) => setNewBattery({...newBattery, batteryId: e.target.value})}
-                  className="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-4 py-2 bg-slate-900 border-2 border-cyan-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white placeholder-cyan-700"
                 />
                 <input
                   type="number"
@@ -893,7 +926,7 @@ export default function NARPitDashboard() {
                   step="0.1"
                   value={newBattery.voltage}
                   onChange={(e) => setNewBattery({...newBattery, voltage: e.target.value})}
-                  className="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-4 py-2 bg-slate-900 border-2 border-cyan-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white placeholder-cyan-700"
                 />
                 <input
                   type="number"
@@ -901,7 +934,7 @@ export default function NARPitDashboard() {
                   step="0.1"
                   value={newBattery.current}
                   onChange={(e) => setNewBattery({...newBattery, current: e.target.value})}
-                  className="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-4 py-2 bg-slate-900 border-2 border-cyan-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white placeholder-cyan-700"
                 />
                 <input
                   type="number"
@@ -909,12 +942,12 @@ export default function NARPitDashboard() {
                   step="0.1"
                   value={newBattery.temperature}
                   onChange={(e) => setNewBattery({...newBattery, temperature: e.target.value})}
-                  className="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-4 py-2 bg-slate-900 border-2 border-cyan-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white placeholder-cyan-700"
                 />
                 <select
                   value={newBattery.status}
                   onChange={(e) => setNewBattery({...newBattery, status: e.target.value as any})}
-                  className="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-4 py-2 bg-slate-900 border-2 border-cyan-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white"
                 >
                   <option value="idle">Idle</option>
                   <option value="charging">Charging</option>
@@ -925,7 +958,7 @@ export default function NARPitDashboard() {
                   placeholder="Location"
                   value={newBattery.location}
                   onChange={(e) => setNewBattery({...newBattery, location: e.target.value})}
-                  className="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-4 py-2 bg-slate-900 border-2 border-cyan-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white placeholder-cyan-700"
                 />
               </div>
               <div className="flex gap-4">
@@ -934,11 +967,11 @@ export default function NARPitDashboard() {
                   placeholder="Notes (optional)"
                   value={newBattery.notes}
                   onChange={(e) => setNewBattery({...newBattery, notes: e.target.value})}
-                  className="flex-1 px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 px-4 py-2 bg-slate-900 border-2 border-cyan-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white placeholder-cyan-700"
                 />
                 <button
                   onClick={handleAddBatteryRecord}
-                  className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition flex items-center gap-2"
+                  className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-lg font-bold transition-all transform hover:scale-105 flex items-center gap-2 shadow-lg shadow-cyan-500/50"
                 >
                   <Battery size={20} />
                   Add Record
@@ -947,41 +980,41 @@ export default function NARPitDashboard() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-white p-4 rounded-lg shadow">
-                <h3 className="font-semibold mb-2 flex items-center gap-2 text-green-600">
-                  <Battery size={20} />
+              <div className="bg-gradient-to-br from-slate-800 to-green-900 p-6 rounded-2xl shadow-2xl border-2 border-green-500/30">
+                <h3 className="font-bold mb-2 flex items-center gap-2 text-green-400 text-lg">
+                  <Battery size={24} />
                   Active Batteries
                 </h3>
-                <div className="text-2xl font-bold">
+                <div className="text-4xl font-bold text-white">
                   {Object.keys(batteryStats).length}
                 </div>
               </div>
-              <div className="bg-white p-4 rounded-lg shadow">
-                <h3 className="font-semibold mb-2 flex items-center gap-2 text-yellow-600">
-                  <AlertCircle size={20} />
+              <div className="bg-gradient-to-br from-slate-800 to-yellow-900 p-6 rounded-2xl shadow-2xl border-2 border-yellow-500/30">
+                <h3 className="font-bold mb-2 flex items-center gap-2 text-yellow-400 text-lg">
+                  <AlertCircle size={24} />
                   Warnings
                 </h3>
-                <div className="text-2xl font-bold">
+                <div className="text-4xl font-bold text-white">
                   {Object.values(batteryStats).filter((s: any) => s.status === 'warning').length}
                 </div>
               </div>
-              <div className="bg-white p-4 rounded-lg shadow">
-                <h3 className="font-semibold mb-2 flex items-center gap-2 text-red-600">
-                  <AlertCircle size={20} />
+              <div className="bg-gradient-to-br from-slate-800 to-red-900 p-6 rounded-2xl shadow-2xl border-2 border-red-500/30">
+                <h3 className="font-bold mb-2 flex items-center gap-2 text-red-400 text-lg">
+                  <AlertCircle size={24} />
                   Critical
                 </h3>
-                <div className="text-2xl font-bold">
+                <div className="text-4xl font-bold text-white">
                   {Object.values(batteryStats).filter((s: any) => s.status === 'critical').length}
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow">
-              <div className="p-6 border-b flex justify-between items-center">
-                <h2 className="text-xl font-semibold">Battery Records</h2>
+            <div className="bg-gradient-to-br from-slate-800 to-blue-900 rounded-2xl shadow-2xl border-2 border-cyan-500/30">
+              <div className="p-6 border-b border-cyan-500/30 flex justify-between items-center">
+                <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Battery Records</h2>
                 <button
                   onClick={refreshBatteryData}
-                  className="flex items-center gap-2 px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition"
+                  className="flex items-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-semibold transition-all transform hover:scale-105"
                 >
                   <RefreshCw size={16} />
                   Refresh
@@ -989,66 +1022,66 @@ export default function NARPitDashboard() {
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-gray-50">
+                  <thead className="bg-slate-900/50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Time</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Battery ID</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Voltage</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Current</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Temp</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Location</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Notes</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-cyan-400 uppercase">Time</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-cyan-400 uppercase">Battery ID</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-cyan-400 uppercase">Voltage</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-cyan-400 uppercase">Current</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-cyan-400 uppercase">Temp</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-cyan-400 uppercase">Status</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-cyan-400 uppercase">Location</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-cyan-400 uppercase">Notes</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200">
+                  <tbody className="divide-y divide-cyan-500/20">
                     {batteryData && batteryData.length > 0 ? batteryData.slice().reverse().map(battery => {
                       const status = getBatteryStatus(battery);
                       return (
                         <tr key={battery.id} className={
-                          status === 'critical' ? 'bg-red-50 border-l-4 border-red-500' : 
-                          status === 'warning' ? 'bg-yellow-50 border-l-4 border-yellow-500' : ''
+                          status === 'critical' ? 'bg-red-900/30 border-l-4 border-red-500' : 
+                          status === 'warning' ? 'bg-yellow-900/30 border-l-4 border-yellow-500' : 'hover:bg-slate-800/50'
                         }>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-cyan-300 font-medium">
                             {formatDateTime(battery.timestamp)}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-white">
                             {battery.batteryId}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-bold">
                             <span className={getBatteryStatusColor(battery)}>
                               {battery.voltage}V
                             </span>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-cyan-300 font-semibold">
                             {battery.current}A
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-cyan-300 font-semibold">
                             {battery.temperature}°C
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`px-2 py-1 text-xs rounded-full ${
-                              battery.status === 'charging' ? 'bg-green-100 text-green-800' :
-                              battery.status === 'discharging' ? 'bg-red-100 text-red-800' :
-                              'bg-gray-100 text-gray-800'
+                            <span className={`px-3 py-1 text-xs rounded-full font-bold ${
+                              battery.status === 'charging' ? 'bg-green-500 text-white' :
+                              battery.status === 'discharging' ? 'bg-red-500 text-white' :
+                              'bg-gray-500 text-white'
                             }`}>
                               {battery.status}
                             </span>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-cyan-300 font-medium">
                             {battery.location || '-'}
                           </td>
-                          <td className="px-6 py-4 text-sm text-gray-900 max-w-xs truncate">
+                          <td className="px-6 py-4 text-sm text-cyan-300 max-w-xs truncate">
                             {battery.notes || '-'}
                           </td>
                         </tr>
                       );
                     }) : (
                       <tr>
-                        <td colSpan={8} className="px-6 py-8 text-center text-gray-500">
+                        <td colSpan={8} className="px-6 py-12 text-center text-cyan-400">
                           <Battery size={48} className="mx-auto mb-4 opacity-50" />
-                          <p>No battery records yet</p>
-                          <p className="text-sm">Add your first record above!</p>
+                          <p className="font-semibold text-lg">No battery records yet</p>
+                          <p className="text-sm text-cyan-500">Add your first record above!</p>
                         </td>
                       </tr>
                     )}
@@ -1060,15 +1093,15 @@ export default function NARPitDashboard() {
         )}
 
         {activeTab === 'stream' && isSetupComplete && (
-          <div className="bg-white rounded-lg shadow">
-            <div className="p-6 border-b">
-              <h2 className="text-xl font-semibold">Live Competition Stream</h2>
-              <p className="text-gray-600 text-sm mt-1">
+          <div className="bg-gradient-to-br from-slate-800 to-blue-900 rounded-2xl shadow-2xl border-2 border-cyan-500/30">
+            <div className="p-6 border-b border-cyan-500/30">
+              <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Live Competition Stream</h2>
+              <p className="text-cyan-300 text-sm mt-1 font-semibold">
                 Event: {eventKey} | Team: {teamNumber}
               </p>
             </div>
             <div className="p-6">
-              <div className="aspect-video bg-black rounded-lg relative overflow-hidden">
+              <div className="aspect-video bg-black rounded-xl relative overflow-hidden shadow-2xl">
                 {streamUrl ? (
                   <iframe
                     width="100%"
@@ -1081,11 +1114,11 @@ export default function NARPitDashboard() {
                     className="absolute inset-0"
                   ></iframe>
                 ) : (
-                  <div className="absolute inset-0 flex items-center justify-center text-white bg-gray-900">
+                  <div className="absolute inset-0 flex items-center justify-center text-white bg-gradient-to-br from-slate-900 to-blue-900">
                     <div className="text-center">
-                      <Wifi size={64} className="mx-auto mb-4 opacity-50" />
-                      <p className="text-lg mb-2">Live Competition Stream</p>
-                      <p className="text-sm opacity-75 mb-4">
+                      <Wifi size={64} className="mx-auto mb-4 text-cyan-400 opacity-50" />
+                      <p className="text-xl mb-2 font-bold text-cyan-400">Live Competition Stream</p>
+                      <p className="text-sm text-cyan-500 mb-4">
                         Stream will appear here during competition
                       </p>
                     </div>
@@ -1093,31 +1126,31 @@ export default function NARPitDashboard() {
                 )}
               </div>
               
-              <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <h3 className="font-semibold mb-2">Stream Information</h3>
-                  <div className="space-y-1 text-sm text-gray-600">
-                    <p>Event: {eventKey}</p>
-                    <p>Team Focus: {teamNumber}</p>
-                    <p>Status: {isLive ? 'Live Updates Active' : 'Offline Mode'}</p>
+              <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 bg-slate-900/50 rounded-xl border border-cyan-500/30">
+                  <h3 className="font-bold mb-2 text-cyan-400">Stream Information</h3>
+                  <div className="space-y-1 text-sm text-cyan-300 font-medium">
+                    <p>Event: <span className="text-white">{eventKey}</span></p>
+                    <p>Team Focus: <span className="text-white">{teamNumber}</span></p>
+                    <p>Status: <span className="text-white">{isLive ? 'Live Updates Active' : 'Offline Mode'}</span></p>
                     {streamUrl && (
-                      <p>Source: {streamUrl.type === 'youtube' ? 'YouTube' : streamUrl.type === 'twitch' ? 'Twitch' : 'Direct'}</p>
+                      <p>Source: <span className="text-white">{streamUrl.type === 'youtube' ? 'YouTube' : streamUrl.type === 'twitch' ? 'Twitch' : 'Direct'}</span></p>
                     )}
                   </div>
                 </div>
                 
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <h3 className="font-semibold mb-2">Quick Actions</h3>
+                <div className="p-4 bg-slate-900/50 rounded-xl border border-cyan-500/30">
+                  <h3 className="font-bold mb-2 text-cyan-400">Quick Actions</h3>
                   <div className="space-y-2">
                     <button
                       onClick={() => setActiveTab('matches')}
-                      className="w-full px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm hover:bg-blue-200 transition"
+                      className="w-full px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg text-sm font-bold transition-all transform hover:scale-105"
                     >
                       View Live Matches
                     </button>
                     <button
                       onClick={() => setActiveTab('rankings')}
-                      className="w-full px-3 py-1 bg-green-100 text-green-700 rounded text-sm hover:bg-green-200 transition"
+                      className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-bold transition-all transform hover:scale-105"
                     >
                       Check Rankings
                     </button>
