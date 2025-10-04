@@ -16,10 +16,12 @@ export default function CommonPage() {
   return (
     <main className="p-8 max-w-3xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Practicals</h1>
+
+
+      {/* Markdown */}
       <article className="prose dark:prose-invert">
         <ReactMarkdown>{markdown}</ReactMarkdown>
       </article>
     </main>
   );
 }
-
