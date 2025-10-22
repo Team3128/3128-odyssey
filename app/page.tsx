@@ -73,7 +73,7 @@ export default function OdysseyPage() {
     }}
   >
     <Image
-      src="/wave.jpg"
+      src="/wave.png"
       alt="Wave background"
       fill
       priority

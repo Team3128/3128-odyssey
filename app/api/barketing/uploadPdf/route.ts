@@ -1,29 +1,33 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
 import path from "path";
+import { promises as fs } from "fs";
 
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
-    const file = formData.get("file") as File;
+    const file = formData.get("file") as File | null;
 
     if (!file) {
-      return NextResponse.json({ success: false, error: "No file provided" }, { status: 400 });
+      return NextResponse.json({ success: false, error: "No file uploaded" }, { status: 400 });
     }
 
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
 
-    const uploadDir = path.join(process.cwd(), "public/pdfs/marketing");
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
+    const dir = path.join(process.cwd(), "public", "barketing_pdfs");
+    await fs.mkdir(dir, { recursive: true });
 
-    const filePath = path.join(uploadDir, file.name);
-    fs.writeFileSync(filePath, buffer);
+    const safeName = file.name.replace(/\s+/g, "_");
+    const filePath = path.join(dir, safeName);
 
-    return NextResponse.json({ success: true, filename: file.name });
+    await fs.writeFile(filePath, buffer);
+
+    return NextResponse.json({ success: true, filename: safeName });
   } catch (err: any) {
-    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+    console.error("UploadPdf Error:", err);
+    return NextResponse.json(
+      { success: false, error: err.message || "Failed to upload" },
+      { status: 500 }
+    );
   }
 }
