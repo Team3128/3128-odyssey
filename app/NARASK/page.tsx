@@ -576,7 +576,6 @@ export default function NaraskPage() {
               </div>
             ))}
           </div>
-          <iframe id ="pdfViewer" src = "../public/barketing_pdfs/FRENCH_TRANSLATION.pdf" width = "100%" height = "600px" style = "border:none;"></iframe>
           {selectedPdf && (
             <div className="mt-6 bg-gray-900 p-4 rounded-xl">
               <h3 className="text-xl font-semibold mb-2">{selectedPdf.name}</h3>
