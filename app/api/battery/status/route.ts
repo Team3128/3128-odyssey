@@ -1,11 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readFile, writeFile } from 'fs/promises';
+import { readFile, writeFile, mkdir } from 'fs/promises';
 import path from 'path';
 
 const BATTERY_DATA_FILE = path.join(process.cwd(), 'data', 'batteries.json');
 
+async function ensureDataDirectory() {
+  const dataDir = path.dirname(BATTERY_DATA_FILE);
+  try {
+    await mkdir(dataDir, { recursive: true });
+  } catch (error) {
+    // Directory might already exist, ignore error
+  }
+}
+
 async function readBatteryData() {
   try {
+    await ensureDataDirectory();
     const data = await readFile(BATTERY_DATA_FILE, 'utf-8');
     return JSON.parse(data);
   } catch (error) {
@@ -14,6 +24,7 @@ async function readBatteryData() {
 }
 
 async function writeBatteryData(data: any[]) {
+  await ensureDataDirectory();
   await writeFile(BATTERY_DATA_FILE, JSON.stringify(data, null, 2));
 }
 

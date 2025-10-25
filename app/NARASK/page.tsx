@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Document, Page } from "react-pdf";
+import "../../lib/dom-polyfills";
 
 type MdFile = {
   name: string;

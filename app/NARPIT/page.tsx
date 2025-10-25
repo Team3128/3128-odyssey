@@ -30,6 +30,8 @@ interface BatteryRecord {
   cycleCount: number;
   status: 'charging' | 'discharging' | 'idle';
   location: string;
+  grade: 'A' | 'B' | 'C';
+  rank: 'Competition' | 'Practice' | 'Driver station' | 'Retired';
   notes?: string;
 }
 
@@ -86,6 +88,8 @@ export default function NARPitDashboard() {
     temperature: '',
     status: 'idle' as 'charging' | 'discharging' | 'idle',
     location: '',
+    grade: 'A' as 'A' | 'B' | 'C',
+    rank: 'Practice' as 'Competition' | 'Practice' | 'Driver station' | 'Retired',
     notes: ''
   });
 
@@ -397,6 +401,8 @@ export default function NARPitDashboard() {
         lastUsed: latest?.timestamp || 0,
         status: analysis.health,
         location: latest?.location || 'Unknown',
+        grade: latest?.grade || 'A',
+        rank: latest?.rank || 'Practice',
         warnings: analysis.warnings,
         notes: latest?.notes || ''
       };
@@ -508,6 +514,8 @@ export default function NARPitDashboard() {
         temperature: '',
         status: 'idle',
         location: '',
+        grade: 'A',
+        rank: 'Practice',
         notes: ''
       });
     } catch (error) {
@@ -821,14 +829,31 @@ export default function NARPitDashboard() {
               </h3>
               <div className="space-y-2">
                 {Object.keys(batteryStats).length > 0 ? Object.entries(batteryStats).slice(0, 3).map(([id, stats]: [string, any]) => (
-                  <div key={id} className="flex justify-between items-center bg-slate-900/50 rounded-lg px-3 py-2">
-                    <span className="text-sm font-semibold text-cyan-300">{id}</span>
-                    <span className={`text-sm font-bold ${
-                      stats.status === 'critical' ? 'text-red-400' : 
-                      stats.status === 'warning' ? 'text-yellow-400' : 'text-green-400'
-                    }`}>
-                      {stats.currentVoltage.toFixed(1)}V
-                    </span>
+                  <div key={id} className="bg-slate-900/50 rounded-lg px-3 py-2">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-sm font-semibold text-cyan-300">{id}</span>
+                      <span className={`text-sm font-bold ${
+                        stats.status === 'critical' ? 'text-red-400' : 
+                        stats.status === 'warning' ? 'text-yellow-400' : 'text-green-400'
+                      }`}>
+                        {stats.currentVoltage.toFixed(1)}V
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs">
+                      <span className={`px-2 py-1 rounded text-white font-bold ${
+                        stats.grade === 'A' ? 'bg-green-500' :
+                        stats.grade === 'B' ? 'bg-yellow-500' : 'bg-red-500'
+                      }`}>
+                        Grade {stats.grade}
+                      </span>
+                      <span className={`px-2 py-1 rounded text-white font-bold ${
+                        stats.rank === 'Competition' ? 'bg-purple-500' :
+                        stats.rank === 'Practice' ? 'bg-blue-500' :
+                        stats.rank === 'Driver station' ? 'bg-orange-500' : 'bg-gray-500'
+                      }`}>
+                        {stats.rank}
+                      </span>
+                    </div>
                   </div>
                 )) : (
                   <div className="text-cyan-500 text-center">No battery data</div>
@@ -1056,6 +1081,25 @@ export default function NARPitDashboard() {
                   onChange={(e) => setNewBattery({...newBattery, location: e.target.value})}
                   className="px-4 py-2 bg-slate-900 border-2 border-cyan-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white placeholder-cyan-700"
                 />
+                <select
+                  value={newBattery.grade}
+                  onChange={(e) => setNewBattery({...newBattery, grade: e.target.value as any})}
+                  className="px-4 py-2 bg-slate-900 border-2 border-cyan-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white"
+                >
+                  <option value="A">Grade A</option>
+                  <option value="B">Grade B</option>
+                  <option value="C">Grade C</option>
+                </select>
+                <select
+                  value={newBattery.rank}
+                  onChange={(e) => setNewBattery({...newBattery, rank: e.target.value as any})}
+                  className="px-4 py-2 bg-slate-900 border-2 border-cyan-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white"
+                >
+                  <option value="Competition">Competition</option>
+                  <option value="Practice">Practice</option>
+                  <option value="Driver station">Driver station</option>
+                  <option value="Retired">Retired</option>
+                </select>
               </div>
               <div className="flex gap-4">
                 <input
@@ -1139,6 +1183,8 @@ export default function NARPitDashboard() {
                       <th className="px-6 py-3 text-left text-xs font-bold text-cyan-400 uppercase">Current</th>
                       <th className="px-6 py-3 text-left text-xs font-bold text-cyan-400 uppercase">Temp</th>
                       <th className="px-6 py-3 text-left text-xs font-bold text-cyan-400 uppercase">Status</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-cyan-400 uppercase">Grade</th>
+                      <th className="px-6 py-3 text-left text-xs font-bold text-cyan-400 uppercase">Rank</th>
                       <th className="px-6 py-3 text-left text-xs font-bold text-cyan-400 uppercase">Location</th>
                       <th className="px-6 py-3 text-left text-xs font-bold text-cyan-400 uppercase">Notes</th>
                     </tr>
@@ -1188,6 +1234,25 @@ export default function NARPitDashboard() {
                               </select>
                             </div>
                           </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className={`px-3 py-1 text-xs rounded-full font-bold ${
+                              battery.grade === 'A' ? 'bg-green-500 text-white' :
+                              battery.grade === 'B' ? 'bg-yellow-500 text-white' :
+                              'bg-red-500 text-white'
+                            }`}>
+                              Grade {battery.grade}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className={`px-3 py-1 text-xs rounded-full font-bold ${
+                              battery.rank === 'Competition' ? 'bg-purple-500 text-white' :
+                              battery.rank === 'Practice' ? 'bg-blue-500 text-white' :
+                              battery.rank === 'Driver station' ? 'bg-orange-500 text-white' :
+                              'bg-gray-500 text-white'
+                            }`}>
+                              {battery.rank}
+                            </span>
+                          </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-cyan-300 font-medium">
                             {battery.location || '-'}
                           </td>
@@ -1198,7 +1263,7 @@ export default function NARPitDashboard() {
                       );
                     }) : (
                       <tr>
-                        <td colSpan={8} className="px-6 py-12 text-center text-cyan-400">
+                        <td colSpan={10} className="px-6 py-12 text-center text-cyan-400">
                           <Battery size={48} className="mx-auto mb-4 opacity-50" />
                           <p className="font-semibold text-lg">No battery records yet</p>
                           <p className="text-sm text-cyan-500">Add your first record above!</p>
