@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import "../lib/dom-polyfills";
 import { ClientPolyfills } from "./ClientPolyfills";
 
 const geistSans = Geist({
