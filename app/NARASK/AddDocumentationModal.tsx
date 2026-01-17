@@ -1,11 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
-import RichTextEditor from "./RichTextEditor";
 
 interface AddDocumentationModalProps {
   isOpen: boolean;
   onClose: () => void;
-  existingFiles: { filename: string; displayName: string }[]; // now includes display name
+  existingFiles: { filename: string; displayName: string }[]; 
   useRichText?: boolean;
   onSaved?: () => void;
 }
@@ -107,20 +106,6 @@ export default function AddDocumentationModal({
               />
             </div>
           </>
-        )}
-
-        {/* Editor */}
-        {useRichText ? (
-          <div className="mb-4">
-            <RichTextEditor value={content} onChange={setContent} />
-          </div>
-        ) : (
-          <textarea
-            className="w-full p-2 rounded bg-gray-800 text-white h-40 mb-4"
-            placeholder="Write your markdown here..."
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
         )}
 
         <div className="flex justify-end space-x-2">

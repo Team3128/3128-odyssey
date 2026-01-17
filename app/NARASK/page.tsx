@@ -97,6 +97,40 @@ export default function NaraskPage() {
     };
     loadPdfs();
   }, []);
+  
+  useEffect(() => {
+  if (mode !== "append" || !selectedFile) return;
+
+  const loadExistingDoc = async () => {
+    try {
+      // find the file object
+      const file = mdFiles.find((f) => f.slug === selectedFile);
+      if (!file) return;
+
+      const res = await fetch(file.path);
+      const text = await res.text();
+
+      setNewDocContent(text);
+    } catch (err) {
+      console.error("Failed to load existing doc:", err);
+      setNewDocContent("");
+    }
+  };
+
+  loadExistingDoc();
+}, [mode, selectedFile, mdFiles]);
+
+useEffect(()=>{
+
+}, [])
+
+useEffect(() => {
+  if (mode === "new") {
+    setNewDocContent("");
+    setSelectedFile("");
+  }
+}, [mode]);
+
 
   const handleUploadPdf = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return;
@@ -452,7 +486,7 @@ export default function NaraskPage() {
             ))}
           </aside>
 
-          {/* Filters & Results */}
+{/* Filters & Results */}
 <div className="w-full max-w-full mx-auto mt-6">
   {/* Filters */}
   <div className="flex border-gray-700">
