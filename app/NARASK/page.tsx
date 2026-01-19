@@ -408,9 +408,10 @@ useEffect(() => {
                         >
                           <option value="">Select file to append</option>
                           {mdFiles.map((f) => (
-                            <option key={f.slug} value={f.slug}>
+                            <option key={f.path} value={f.path}>
                               {f.name}
                             </option>
+
                           ))}
                         </select>
                       )}
