@@ -76,6 +76,9 @@ export default function NaraskPage() {
   const [newDocContent, setNewDocContent] = useState("");
   const [mode, setMode] = useState<"new" | "append">("new");
   const [selectedFile, setSelectedFile] = useState<string>("");
+  
+  const [uploadPdfOpen, setUploadPdfOpen] = useState(false);
+  const [pdfUploading, setPdfUploading] = useState(false);
 
   const sidebarRef = useRef<HTMLDivElement>(null);
   const howToFile = { name: "How To Add Docs", slug: "howto", path: "/md_files/howto.md" };
@@ -131,27 +134,6 @@ useEffect(() => {
   }
 }, [mode]);
 
-
-  const handleUploadPdf = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files?.length) return;
-    const formData = new FormData();
-    formData.append("file", e.target.files[0]);
-    try {
-      const res = await fetch("/api/barketing/uploadPdf", { method: "POST", body: formData });
-      const result = await res.json();
-      if (result.success) {
-        alert("PDF uploaded!");
-        const refresh = await fetch("/api/barketing/listPdfs");
-        const data = await refresh.json();
-        if (data.success) setPdfFiles(data.files);
-      } else {
-        alert("Upload failed: " + result.error);
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Upload failed.");
-    }
-  };
 
   // --- LOAD MARKDOWN FILES ---
   useEffect(() => {
@@ -231,6 +213,8 @@ useEffect(() => {
     ),
   };
 
+
+
   // --- Build Display Cards ---
   let displayCards: { type: "file" | "section"; file: MdFile; section?: Section; idx?: number }[] = [];
   if (search.trim() === "" && !activeFilter) {
@@ -281,9 +265,108 @@ useEffect(() => {
       alert("Error saving documentation");
     }
   };
+const uploadPdf = async (file: File) => {
+  setPdfUploading(true);
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const res = await fetch("/api/barketing/uploadPdf", {
+      method: "POST",
+      body: formData,
+    });
+
+    const result = await res.json();
+    if (!result.success) throw new Error(result.error || "Upload failed");
+
+    alert("PDF uploaded successfully!");
+
+    // Refresh PDF list
+    const refresh = await fetch("/api/barketing/listPdfs");
+    const data = await refresh.json();
+    if (data.success) setPdfFiles(data.files);
+
+    setUploadPdfOpen(false);
+  } catch (err: any) {
+    console.error(err);
+    alert("PDF upload failed: " + err.message);
+  } finally {
+    setPdfUploading(false);
+  }
+};
+
+
 
   return (
     <div className="min-h-screen relative bg-black p-8 text-white">
+      <AnimatePresence>
+  {uploadPdfOpen && (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
+    >
+      <motion.div
+        initial={{ scale: 0.9 }}
+        animate={{ scale: 1 }}
+        exit={{ scale: 0.9 }}
+        className="bg-gray-900 p-6 rounded-2xl w-full max-w-xl text-white relative"
+      >
+        <button
+          className="absolute top-3 right-3 text-gray-400 hover:text-white"
+          onClick={() => setUploadPdfOpen(false)}
+        >
+          ✕
+        </button>
+
+        <h2 className="text-2xl font-bold mb-4">Upload Barketing PDF</h2>
+
+<div
+  className="border-2 border-dashed border-gray-600 rounded-xl p-10 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500"
+  onDragOver={(e) => e.preventDefault()} // allow drop
+  onDrop={(e) => {
+    e.preventDefault();
+    if (e.dataTransfer.files.length === 0) return;
+    const file = e.dataTransfer.files[0];
+    if (file.type !== "application/pdf") {
+      alert("Only PDFs are allowed.");
+      return;
+    }
+    uploadPdf(file);
+  }}
+  onClick={() => document.getElementById("barketing-pdf-upload")?.click()} // click to open file picker
+>
+  <span className="text-gray-300 mb-4">
+    Drag & drop a PDF here or click to browse
+  </span>
+
+  <input
+    type="file"
+    accept="application/pdf"
+    className="hidden"
+    id="barketing-pdf-upload"
+    onChange={(e) => {
+      if (!e.target.files?.length) return;
+      const file = e.target.files[0];
+      if (file.type !== "application/pdf") {
+        alert("Only PDFs are allowed.");
+        return;
+      }
+    uploadPdf(e.target.files[0]); 
+    }}
+  />
+</div>
+
+
+        {pdfUploading && (
+          <p className="mt-4 text-blue-400">Uploading…</p>
+        )}
+      </motion.div>
+    </motion.div>
+  )}
+</AnimatePresence>
       {/* Header */}
       <header className="flex flex-col items-center gap-6 mb-8 relative">
         <button onClick={() => setMenuOpen(!menuOpen)} className="absolute left-0 top-0 p-2">
@@ -316,12 +399,19 @@ useEffect(() => {
 
         <h1 className="text-4xl font-bold text-center">NARASK</h1>
 
-        <button
-          onClick={() => setAddDocOpen(true)}
-          className="absolute right-0 top-0 flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-full font-semibold shadow-lg transition"
-        >
-          <Plus size={18} /> Add Documentation
-        </button>
+    <button
+  onClick={() => {
+    if (activeTab === "software") {
+      setAddDocOpen(true);
+    } else {
+      setUploadPdfOpen(true);
+    }
+  }}
+  className="absolute right-0 top-0 flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-full font-semibold shadow-lg transition"
+>
+  <Plus size={18} />
+  {activeTab === "software" ? "Add Documentation" : "Upload PDF"}
+</button>
 
         <div className="w-full max-w-3xl relative group">
           <input
@@ -598,41 +688,43 @@ useEffect(() => {
     )}
   </div>
 </div>
-
-        </>
+</>
       )}
 
-      {/* BARKETING SECTION */}
-      {activeTab === "barketing" && (
-        <section className="mt-8">
-          <h2 className="text-3xl font-bold mb-4">Barketing Documentation</h2>
-          <label className="block mb-4 cursor-pointer">
-            <span className="bg-blue-600 px-4 py-2 rounded">Upload PDF</span>
-            <input type="file" accept="application/pdf" onChange={handleUploadPdf} className="hidden" />
-          </label>
-          <div className="space-y-3">
-            {pdfFiles.map((pdf) => (
-              <div
-                key={pdf.name}
-                className="bg-gray-800 p-3 rounded cursor-pointer hover:bg-gray-700"
-                onClick={() => setSelectedPdf(pdf)}
-              >
-                {pdf.name}
-              </div>
-            ))}
-          </div>
-          {selectedPdf && (
-            <div className="mt-6 bg-gray-900 p-4 rounded-xl">
-              <h3 className="text-xl font-semibold mb-2">{selectedPdf.name}</h3>
-              <div className="border border-gray-700 rounded-lg overflow-hidden flex justify-center">
-                <Document file={selectedPdf.url}>
-                  <Page pageNumber={1} width={800} />
-                </Document>
-              </div>
-            </div>
-          )}
-        </section>
-      )}
+{/* BARKETING SECTION */}
+
+{activeTab === "barketing" && (
+  <section className="mt-8">
+    <h2 className="text-3xl font-bold mb-4">Barketing PDFs</h2>
+
+    {/* PDF List */}
+    <div className="space-y-3 mb-6">
+      {pdfFiles.map((pdf) => (
+        <div
+          key={pdf.name}
+          className="bg-gray-800 p-3 rounded cursor-pointer hover:bg-gray-700"
+          onClick={() => setSelectedPdf(pdf)}
+        >
+          {pdf.name}
+        </div>
+      ))}
+    </div>
+
+    {/* PDF Viewer */}
+    {selectedPdf && (
+      <div className="bg-gray-900 p-4 rounded-xl border border-gray-700">
+        <h3 className="text-xl font-semibold mb-2">
+          {selectedPdf.name}
+        </h3>
+
+        <iframe
+          src={selectedPdf.url}
+          className="w-full h-[800px] rounded border border-gray-700"
+        />
+      </div>
+    )}
+  </section>
+)}
     </div>
   );
 }
