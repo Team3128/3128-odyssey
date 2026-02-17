@@ -97,9 +97,13 @@ const SUBSYSTEMS: Subsystem[] = [
     ],
     align: 'right',
     meshNames: ['Intake', 'Intake_Roller', 'Intake_Frame'],
+    // camera: {
+    //   position: { x: 4, y: 1.2, z: 4 },
+    //   lookAt: { x: 4, y: 1.2, z: 1 },
+    // },
     camera: {
-      position: { x: 0.5, y: 1.2, z: 4.5 },
-      lookAt: { x: 0, y: 0.6, z: 1.5 },
+      position: { x: 0, y: 0, z: -20 },
+      lookAt: { x: 0, y: 0, z: -2 },
     },
   },
   {
@@ -170,8 +174,8 @@ const SUBSYSTEMS: Subsystem[] = [
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const HERO_CAMERA: CameraTarget = {
-  position: { x: 0, y: 2.5, z: 9 },
-  lookAt: { x: 0, y: 1.5, z: 0 },
+  position: { x: -3, y: 2.5, z: 9 },
+  lookAt: { x: -3, y: 1.5, z: 0 },
 }
 
 const DIM_OPACITY = 0.08
@@ -288,7 +292,7 @@ export default function TechnicalBinder() {
     renderer.shadowMap.enabled = true
     renderer.shadowMap.type = THREE.PCFSoftShadowMap
     renderer.toneMapping = THREE.ACESFilmicToneMapping
-    renderer.toneMappingExposure = 1.4
+    renderer.toneMappingExposure = 1.2
     renderer.outputColorSpace = THREE.SRGBColorSpace
 
     // ── Lights ─────────────────────────────────────────────────────────────
@@ -352,7 +356,7 @@ export default function TechnicalBinder() {
     let robotRoot: THREE.Object3D | null = null
 
     gltfLoader.load(
-      'models/robot.gltf',
+      'models/3128robot2026.glb',
       (gltf) => {
         if (disposed) return
 
@@ -367,6 +371,8 @@ export default function TechnicalBinder() {
         robotRoot.scale.setScalar(scale)
         robotRoot.position.sub(center.multiplyScalar(scale))
         robotRoot.position.y += 0           // sit on ground
+        robotRoot.rotateX(-Math.PI/2)
+        robotRoot.rotateZ(-Math.PI/3);
 
         // Shadows + material prep
         robotRoot.traverse((obj) => {
@@ -462,7 +468,7 @@ export default function TechnicalBinder() {
 
     // ── Scroll Animations ──────────────────────────────────────────────────
 
-    function animateCamera(target: CameraTarget, scrub = 1.4) {
+    function animateCamera(target: CameraTarget, scrub = 0.1) {
       return {
         position: target.position,
         lookAt: target.lookAt,
@@ -476,7 +482,7 @@ export default function TechnicalBinder() {
         toPosition: { x: number; y: number; z: number },
         toLookAt: { x: number; y: number; z: number },
         trigger: string,
-        scrub = 1.4
+        scrub = 0.1
       ) {
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -497,7 +503,7 @@ export default function TechnicalBinder() {
           trigger: '#section-hero',
           start: 'top top',
           end: 'bottom top',
-          scrub: 1.4,
+          scrub: 0.1,
           pin: false,
         },
       })
@@ -510,7 +516,7 @@ export default function TechnicalBinder() {
           sub.camera.position,
           sub.camera.lookAt,
           `#section-${sub.id}`,
-          1.4
+          0.1
         )
 
         ScrollTrigger.create({
@@ -683,7 +689,7 @@ export default function TechnicalBinder() {
         {/* ── HERO ─────────────────────────────────────────────────────── */}
         <section
           id="section-hero"
-          className="min-h-screen flex flex-col justify-end pb-20 px-10 md:px-20"
+          className="min-h-screen flex flex-col justify-center pb-20 px-10 md:px-20"
         >
           {/* Team number — big, bottom-left */}
           <div>
@@ -714,11 +720,6 @@ export default function TechnicalBinder() {
               Aluminum Narwhals
             </h2>
 
-            <p style={{ color: '#8899aa', maxWidth: '36ch', lineHeight: 1.65, fontSize: '1rem' }}>
-              Technical Documentation & Innovation Portfolio.
-              <br />
-              Scroll to explore each robot subsystem.
-            </p>
           </div>
 
           {/* Scroll indicator */}
