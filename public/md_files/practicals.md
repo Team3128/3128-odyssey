@@ -11,7 +11,7 @@ Authors: William Yuan (Wallim), Audrey Zheng, Maggie Liang, Lucas Han
 
 ### Cancoder Offsets
 1. Set CANCoder offsets in SwerveConstants (e.g. `MOD0_CANCODER_OFFSET`) to `0` and deploy.
-2. Align all wheels so each bevel faces the left of the robot.
+2. Align all wheels so each bevel faces the **right** of the robot.
 3. Replace CANCoder offsets to the CANCoder offsets on Shuffleboard.
 
 ### Odometry doesn't work
