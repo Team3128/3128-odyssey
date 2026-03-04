@@ -46,8 +46,8 @@ export default function OdysseyPage() {
       <div className="fixed top-0 left-0 w-full flex justify-between items-center p-4 bg-black bg-opacity-50 z-50">
         <div className="text-white text-2xl font-bold">ODYSSEY</div>
         <nav className="flex gap-4 text-white">
-          <Link href="/NARASK">NARASK</Link>
-          <Link href="/NARPIT">NARPIT</Link>
+          <Link href="/narask">NARASK</Link>
+          <Link href="/narpit">NARPIT</Link>
           <Link href="/nartech">NARTECH</Link>
           <a
             href="https://manta-scouting-neptune.vercel.app"
@@ -100,7 +100,7 @@ export default function OdysseyPage() {
 
       {/* Project menu */}
       <section id="project_menu" className="flex w-full h-screen snap-start">
-        <Link href="/NARASK" className="project_item bg-[#08173a]">
+        <Link href="/narask" className="project_item bg-[#08173a]">
           <p className="num">3</p>
           <h4>NARASK</h4>
         </Link>

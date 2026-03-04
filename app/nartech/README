@@ -1,0 +1,197 @@
+# Robot Subsystem Display Component
+
+An interactive Next.js component for displaying robot subsystems with custom 3D models, technical specifications, and control information.
+
+## Features
+
+- **Custom 3D Models**: Load your own .glb, .gltf, .obj, or .stl files
+- **Fallback Model**: Beautiful built-in robot arm if no model is provided
+- **Interactive 3D**: Click and drag to rotate models with smooth animations
+- **Modern Design**: Sleek glass-morphic UI with gradient accents and hover effects
+- **Responsive Layout**: Automatically adapts to horizontal and vertical orientations
+- **Flexible Content**: Support for varying numbers of technical specs and controls
+- **Image Support**: Both technical specs and controls can include images
+- **Professional Theme**: Navy blue and electric blue color scheme with subtle animations
+
+## Installation
+
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Make sure you have Tailwind CSS configured in your Next.js project.
+
+## Usage
+
+### Basic Usage (with fallback model)
+
+```tsx
+import SubsystemDisplayPage from './SubsystemDisplayPage';
+
+export default function MyPage() {
+  const technicalSpecs = [
+    {
+      label: 'Motor Type',
+      value: 'NEO Brushless',
+      image: '/path/to/image.jpg' // Optional
+    },
+    // Add more specs...
+  ];
+
+  const controls = [
+    {
+      name: 'Position Control',
+      description: 'Uses PID control for precise positioning.',
+      image: '/path/to/image.jpg' // Optional
+    },
+    // Add more controls...
+  ];
+
+  return (
+    <SubsystemDisplayPage
+      subsystemName="Arm Subsystem"
+      modelConfig={{
+        color: '#2563eb', // Optional: customize model color
+        rotationSpeed: 0.005 // Optional: adjust rotation speed
+      }}
+      technicalSpecs={technicalSpecs}
+      controls={controls}
+    />
+  );
+}
+```
+
+### Advanced Usage (with custom 3D model)
+
+```tsx
+export default function MyPage() {
+  return (
+    <SubsystemDisplayPage
+      subsystemName="Custom Robot"
+      modelPath="/models/robot.glb" // Your custom model
+      modelConfig={{
+        color: '#3b82f6',
+        rotationSpeed: 0.003,
+        scale: 2.0, // Scale the model
+        position: { x: 0, y: -1, z: 0 } // Position offset
+      }}
+      technicalSpecs={[...]}
+      controls={[...]}
+    />
+  );
+}
+```
+
+## Props
+
+### SubsystemDisplayPageProps
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `subsystemName` | `string` | Yes | Name of the subsystem displayed in the header |
+| `modelPath` | `string` | No | Path to custom 3D model (.glb, .gltf, .obj, .stl) |
+| `modelConfig` | `object` | No | Configuration for the 3D model |
+| `modelConfig.color` | `string` | No | Hex color for the model (default: #2563eb) |
+| `modelConfig.rotationSpeed` | `number` | No | Speed of automatic rotation (default: 0.005) |
+| `modelConfig.scale` | `number` | No | Scale factor for custom models (default: 1.0) |
+| `modelConfig.position` | `{x, y, z}` | No | Position offset for custom models |
+| `technicalSpecs` | `TechnicalItem[]` | Yes | Array of technical specifications |
+| `controls` | `ControlItem[]` | Yes | Array of control information |
+
+### TechnicalItem
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `label` | `string` | Yes | Label for the specification |
+| `value` | `string` | Yes | Value of the specification |
+| `image` | `string` | No | Optional image URL |
+
+### ControlItem
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `name` | `string` | Yes | Name of the control |
+| `description` | `string` | Yes | Description of how the control works |
+| `image` | `string` | No | Optional image URL |
+
+## Supported 3D Model Formats
+
+- **.glb / .gltf**: Recommended format, best compatibility
+- **.obj**: Wavefront OBJ files
+- **.stl**: STL files (commonly used in 3D printing)
+
+### Preparing Your 3D Models
+
+1. **Place models in your public folder**: `/public/models/your-model.glb`
+2. **Optimize file size**: Keep models under 5MB for best performance
+3. **Test orientation**: You may need to adjust the `position` and `scale` parameters
+4. **Fallback**: If the model fails to load, the built-in fallback model displays automatically
+
+## Design Features
+
+### Modern Glass-morphic UI
+- Backdrop blur effects for depth
+- Gradient borders with subtle animations
+- Hover effects that respond to user interaction
+- Smooth transitions throughout
+
+### Enhanced 3D Visualization
+- Multi-light setup for professional rendering
+- Shadow mapping for depth perception
+- Metallic materials with proper reflections
+- Animated platform glow effect
+- Corner accent decorations
+
+### Responsive Behavior
+
+- **Horizontal Display** (width > height): Two-column layout with 3D model on left
+- **Vertical Display** (height > width): Single-column stacked layout
+
+## 3D Model Interaction
+
+- **Click and Drag**: Rotate the model freely in any direction
+- **Automatic Rotation**: Model slowly rotates when not being interacted with
+- **Loading States**: Visual feedback while custom models load
+- **Error Handling**: Automatic fallback to built-in model if loading fails
+
+## Color Scheme
+
+The component uses a modern electric blue theme:
+- **Background**: Deep space gradient (slate-950 to blue-950)
+- **Primary**: Electric blue (#2563eb)
+- **Accent**: Sky blue (#60a5fa, #93c5fd)
+- **Text**: White with blue highlights
+- **Glass Effects**: Translucent overlays with blur
+
+## Performance
+
+- Optimized rendering with Three.js
+- Efficient shadow mapping
+- Responsive canvas sizing
+- Proper cleanup on unmount
+- Loading states for async model loading
+
+## Browser Compatibility
+
+Requires WebGL support for 3D rendering. Compatible with:
+- Chrome/Edge (recommended)
+- Firefox
+- Safari
+- Any modern browser with WebGL 2.0
+
+## Troubleshooting
+
+**Model not loading?**
+- Check the file path is correct
+- Ensure the file is in the `/public` directory
+- Check browser console for specific errors
+- Verify the file format is supported
+
+**Model appears too large/small?**
+- Adjust the `scale` parameter in `modelConfig`
+- Try values between 0.5 and 3.0
+
+**Model is in the wrong position?**
+- Adjust the `position` parameter
+- Try different y-values to move it up/down
