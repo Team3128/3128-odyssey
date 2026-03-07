@@ -88,12 +88,12 @@ const SUBSYSTEM_DATA: Record<string, SubsystemData> = {
       },
     ],
     imageCards: [
-      { src: '/images/subsystems/swerve/module-closeup.png',   caption: 'MK4i module with Kraken x60 drive motor',      category: 'process'    },
-      { src: '/images/subsystems/swerve/chassis-top.png',      caption: 'Bellypan electrical layout — top view',        category: 'process'    },
-      { src: '/images/subsystems/swerve/bumper-segments.png',  caption: '5-segment bumper assembly with split side',    category: 'process'    },
-      { src: '/images/subsystems/swerve/dashboard-drive.png',  caption: 'Driver dashboard — swerve telemetry',          category: 'dashboard'  },
-      { src: '/images/subsystems/swerve/controls-map.png',     caption: 'Driver controller mapping',                   category: 'controls'   },
-      { src: '/images/subsystems/swerve/controls-pid.png',     caption: 'Swerve PID tuning interface',                 category: 'controls'   },
+      // { src: '/images/subsystems/swerve/module-closeup.png',   caption: 'MK4i module with Kraken x60 drive motor',      category: 'process'    },
+      // { src: '/images/subsystems/swerve/chassis-top.png',      caption: 'Bellypan electrical layout — top view',        category: 'process'    },
+      // { src: '/images/subsystems/swerve/bumper-segments.png',  caption: '5-segment bumper assembly with split side',    category: 'process'    },
+      // { src: '/images/subsystems/swerve/dashboard-drive.png',  caption: 'Driver dashboard — swerve telemetry',          category: 'dashboard'  },
+      // { src: '/images/subsystems/swerve/controls-map.png',     caption: 'Driver controller mapping',                   category: 'controls'   },
+      // { src: '/images/subsystems/swerve/controls-pid.png',     caption: 'Swerve PID tuning interface',                 category: 'controls'   },
     ],
     controlsNotes: [
       'Field-centric drive via NavX2 gyroscope — heading is robot-orientation-independent',
