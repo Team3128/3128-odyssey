@@ -716,15 +716,15 @@ export default function TechnicalBinder() {
                 </p>
               </div>
               <div className="flex flex-col gap-2">
-                <Link href="/controls" style={{ ...linkBtnStyle, justifyContent: 'center' }}
+                <Link href="nartech/controls" style={{ ...linkBtnStyle, justifyContent: 'center' }}
                   onMouseEnter={hoverOn} onMouseLeave={hoverOff}>
                   Control Systems <ArrowIcon />
                 </Link>
-                <Link href="/controls/autonomous" style={{ ...linkBtnStyle, justifyContent: 'center' }}
+                <Link href="nartech/controls" style={{ ...linkBtnStyle, justifyContent: 'center' }}
                   onMouseEnter={hoverOn} onMouseLeave={hoverOff}>
                   Autonomous Functions <ArrowIcon />
                 </Link>
-                <Link href="/controls/architecture" style={{ ...linkBtnStyle, justifyContent: 'center' }}
+                <Link href="nartech/controls" style={{ ...linkBtnStyle, justifyContent: 'center' }}
                   onMouseEnter={hoverOn} onMouseLeave={hoverOff}>
                   Other <ArrowIcon />
                 </Link>
@@ -734,7 +734,7 @@ export default function TechnicalBinder() {
 
           {/* ── View Our Process ── */}
           <Link
-            href="/process"
+            href="/nartech/process"
             className="w-3/4 rounded-2xl overflow-hidden group"
             style={{
               background: 'rgba(0, 10, 28, 0.85)',

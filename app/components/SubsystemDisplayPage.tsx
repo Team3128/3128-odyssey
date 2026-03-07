@@ -96,10 +96,10 @@ const SUBSYSTEM_DATA: Record<string, SubsystemData> = {
       // { src: '/images/subsystems/swerve/controls-pid.png',     caption: 'Swerve PID tuning interface',                 category: 'controls'   },
     ],
     controlsNotes: [
-      'Field-centric drive via NavX2 gyroscope — heading is robot-orientation-independent',
-      'Steer motors run closed-loop on CANCoder absolute position',
-      'Drive motors use velocity control with feed-forward from SysId characterization',
-      'Slip detection via motor current thresholds automatically reduces drive output',
+      // 'Field-centric drive via NavX2 gyroscope — heading is robot-orientation-independent',
+      // 'Steer motors run closed-loop on CANCoder absolute position',
+      // 'Drive motors use velocity control with feed-forward from SysId characterization',
+      // 'Slip detection via motor current thresholds automatically reduces drive output',
     ],
   },
   shooter: {
@@ -131,16 +131,15 @@ const SUBSYSTEM_DATA: Record<string, SubsystemData> = {
       },
     ],
     imageCards: [
-      { src: '/images/subsystems/shooter/drum-closeup.png',    caption: 'Steel drum with cats tongue surface',          category: 'process'   },
-      { src: '/images/subsystems/shooter/hood-assembly.png',   caption: 'Polycarbonate hood and kicker roller layout',  category: 'process'   },
-      { src: '/images/subsystems/shooter/dashboard-rpm.png',   caption: 'Shooter RPM telemetry on dashboard',          category: 'dashboard' },
-      { src: '/images/subsystems/shooter/controls-map.png',    caption: 'Operator controller — shooting controls',     category: 'controls'  },
+      // { src: '/images/subsystems/shooter/drum-closeup.png',    caption: 'Steel drum with cats tongue surface',          category: 'process'   },
+      // { src: '/images/subsystems/shooter/hood-assembly.png',   caption: 'Polycarbonate hood and kicker roller layout',  category: 'process'   },
+      { src: '/images/subsystems/shooter/interpolation.png',   caption: 'Interpolation graph to determine shooting speed from different distances', category: 'controls' },
+      { src: '/images/subsystems/shooter/shooter-state-machine.png',    caption: 'Shooter State Diagram',     category: 'controls'  },
     ],
     controlsNotes: [
-      'Shooter velocity is maintained via closed-loop control on both Kraken x60s',
-      'Fire command waits for "at-speed" confirmation before releasing kicker rollers',
-      'Hood position is fixed — angle was dialed in during pre-season tuning',
-      'Auto-aim uses Limelight vision to adjust drive heading before firing',
+      'Controlled using a Bang-Bang PID Controller in order to ',
+      'Shoot command waits for "at-speed" confirmation before releasing kicker rollers',
+      'Able to shoot from any point on the field through distance-RPM interpolation',
     ],
   },
   hopper: {
@@ -170,15 +169,13 @@ const SUBSYSTEM_DATA: Record<string, SubsystemData> = {
       },
     ],
     imageCards: [
-      { src: '/images/subsystems/hopper/roller-assembly.png',  caption: 'Deadaxle roller belt system',                 category: 'process'   },
-      { src: '/images/subsystems/hopper/expansion-walls.png',  caption: 'Polycarbonate expansion plates extended',     category: 'process'   },
-      { src: '/images/subsystems/hopper/dashboard.png',        caption: 'Hopper state telemetry on dashboard',         category: 'dashboard' },
-      { src: '/images/subsystems/hopper/controls-map.png',     caption: 'Hopper manual override controls',            category: 'controls'  },
+      // { src: '/images/subsystems/hopper/roller-assembly.png',  caption: 'Deadaxle roller belt system',                 category: 'process'   },
+      // { src: '/images/subsystems/hopper/expansion-walls.png',  caption: 'Polycarbonate expansion plates extended',     category: 'process'   },
+      // { src: '/images/subsystems/hopper/dashboard.png',        caption: 'Hopper state telemetry on dashboard',         category: 'dashboard' },
+      { src: '/images/subsystems/hopper/hopper-state-machine.png',     caption: 'Hopper state machine',            category: 'controls'  },
     ],
     controlsNotes: [
-      'Hopper runs continuously when intake or shooter is active',
-      'Serialization logic detects jams via current spike and reverses briefly',
-      'Belt speed is tuned relative to shooter demand — slows during indexing',
+
     ],
   },
   intake: {
@@ -225,7 +222,7 @@ const SUBSYSTEM_DATA: Record<string, SubsystemData> = {
     id: 'climber',
     label: 'Climber',
     category: 'Endgame',
-    modelPath: '/models/subsystems/climber.glb',
+    modelPath: '/models/subsystems/climber.gltf',
     description:
       'The Climber functions on an elevator that serves as the backbone for the shooter, pulling the robot up as the elevator comes down. Steel hooks resist deformation under full robot weight, with Dyneema rope providing high-strength tensioning.',
     cameraZ: 8,
@@ -243,16 +240,16 @@ const SUBSYSTEM_DATA: Record<string, SubsystemData> = {
       },
     ],
     imageCards: [
-      { src: '/images/subsystems/climber/elevator-full.png',   caption: 'Full elevator assembly extended',             category: 'process'   },
-      { src: '/images/subsystems/climber/hooks-detail.png',    caption: 'Steel hook and Dyneema rope attachment',      category: 'process'   },
-      { src: '/images/subsystems/climber/dashboard.png',       caption: 'Climber height telemetry on dashboard',       category: 'dashboard' },
-      { src: '/images/subsystems/climber/controls-map.png',    caption: 'Endgame climber control sequence',           category: 'controls'  },
+      // { src: '/images/subsystems/climber/elevator-full.png',   caption: 'Full elevator assembly extended',             category: 'process'   },
+      // { src: '/images/subsystems/climber/hooks-detail.png',    caption: 'Steel hook and Dyneema rope attachment',      category: 'process'   },
+      // { src: '/images/subsystems/climber/dashboard.png',       caption: 'Climber height telemetry on dashboard',       category: 'dashboard' },
+      { src: '/images/subsystems/climber/climber-state-machine.png',    caption: 'Climber State Machine',           category: 'controls'  },
     ],
     controlsNotes: [
-      'Climb sequence is semi-automated — driver confirms each stage with a button hold',
-      'Elevator uses motion-profiled position control to avoid shock loading hooks',
-      'Servo hook deployment is triggered automatically at target bar height',
-      'Constant force springs reset carriage passively — no motor power needed on retract',
+      // 'Climb sequence is semi-automated — driver confirms each stage with a button hold',
+      // 'Elevator uses motion-profiled position control to avoid shock loading hooks',
+      // 'Servo hook deployment is triggered automatically at target bar height',
+      // 'Constant force springs reset carriage passively — no motor power needed on retract',
     ],
   },
 }
@@ -642,7 +639,7 @@ export default function SubsystemPage({ id }: SubsystemPageProps) {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         height: 52,
       }}>
-        <Link href="/" style={{
+        <Link href="/nartech" style={{
           display: 'flex', alignItems: 'center', gap: 8,
           textDecoration: 'none', color: '#0066cc',
           fontSize: '11px', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase',
@@ -663,7 +660,7 @@ export default function SubsystemPage({ id }: SubsystemPageProps) {
           </span>
         </div>
 
-        <Link href="/subsystems" style={{
+        <Link href="/nartech" style={{
           fontSize: '10px', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase',
           color: '#336699', textDecoration: 'none',
         }}>
