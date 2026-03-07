@@ -291,7 +291,7 @@ export default function TechnicalBinder() {
 
     const scene = new THREE.Scene()
     scene.background = new THREE.Color('#000d1a')
-    scene.fog = new THREE.FogExp2(0x000d1a, 0.025)
+    scene.fog = new THREE.FogExp2(0x000d1a, 0.015)
 
     const sizes = { w: window.innerWidth, h: window.innerHeight }
 
@@ -464,9 +464,14 @@ export default function TechnicalBinder() {
         })
       })
 
+      // Outro: pull camera straight up so the robot disappears below frame.
+      // Grid + dark navy remain; only the robot is gone.
       tweenCamera(
-        { x: heroCamera.position.x, y: heroCamera.position.y + 1, z: heroCamera.position.z + 2 },
-        heroCamera.lookAt, 0, 0, 0, '#section-outro', 1.4
+        { x: 60, y: 60, z: 0 },
+        { x: 60, y: 0, z: 0 },
+        0, 0, 0,
+        '#section-outro',
+        1.4
       )
     }
 
@@ -670,7 +675,7 @@ export default function TechnicalBinder() {
                 {/* ── Learn More ── */}
                 <div className="mt-5 flex justify-end">
                   <Link
-                    href={`/nartech/${sub.id}`}
+                    href={`nartech/subsystems/${sub.id}`}
                     style={linkBtnStyle}
                     onMouseEnter={hoverOn}
                     onMouseLeave={hoverOff}
@@ -686,10 +691,13 @@ export default function TechnicalBinder() {
         {/* ── Outro ── */}
         <section
           id="section-outro"
-          className="min-h-screen flex flex-col items-center justify-center text-center px-10 gap-10"
+          className="min-h-screen flex flex-col items-center justify-center px-6 md:px-10 gap-6 py-20"
         >
-          {/* Controls & Software card — natural home for software links after all hardware subsystems */}
-          <div className="rounded-2xl overflow-hidden w-full max-w-sm" style={{
+          <div className="text-[10px] font-bold uppercase tracking-[0.4em] mb-2" style={{ color: '#ffffff' }}>
+            Team 3128 · Aluminum Narwhals
+          </div>
+          {/* ── Controls & Software ── */}
+          <div className="rounded-2xl overflow-hidden w-3/4" style={{
             background: 'rgba(0, 10, 28, 0.85)',
             backdropFilter: 'blur(16px)',
             border: '1px solid rgba(0, 51, 102, 0.5)',
@@ -700,7 +708,7 @@ export default function TechnicalBinder() {
                 <span className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: '#0066cc' }}>
                   Software
                 </span>
-                <h3 className="font-bold mt-1" style={{ fontSize: '1.5rem', lineHeight: 1.1, color: '#ffffff' }}>
+                <h3 className="font-bold mt-1" style={{ fontSize: '1.25rem', lineHeight: 1.1, color: '#ffffff' }}>
                   Controls
                 </h3>
                 <p className="mt-2 text-[12px] leading-relaxed" style={{ color: '#8899bb' }}>
@@ -710,11 +718,11 @@ export default function TechnicalBinder() {
               <div className="flex flex-col gap-2">
                 <Link href="/controls" style={{ ...linkBtnStyle, justifyContent: 'center' }}
                   onMouseEnter={hoverOn} onMouseLeave={hoverOff}>
-                  Robot Control <ArrowIcon />
+                  Control Systems <ArrowIcon />
                 </Link>
                 <Link href="/controls/autonomous" style={{ ...linkBtnStyle, justifyContent: 'center' }}
                   onMouseEnter={hoverOn} onMouseLeave={hoverOff}>
-                  Autonomous Features <ArrowIcon />
+                  Autonomous Functions <ArrowIcon />
                 </Link>
                 <Link href="/controls/architecture" style={{ ...linkBtnStyle, justifyContent: 'center' }}
                   onMouseEnter={hoverOn} onMouseLeave={hoverOff}>
@@ -723,6 +731,143 @@ export default function TechnicalBinder() {
               </div>
             </div>
           </div>
+
+          {/* ── View Our Process ── */}
+          <Link
+            href="/process"
+            className="w-3/4 rounded-2xl overflow-hidden group"
+            style={{
+              background: 'rgba(0, 10, 28, 0.85)',
+              backdropFilter: 'blur(16px)',
+              border: '1px solid rgba(0, 51, 102, 0.5)',
+              textDecoration: 'none',
+              display: 'block',
+              transition: 'border-color 0.3s, box-shadow 0.3s',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(0,153,255,0.6)'
+              e.currentTarget.style.boxShadow   = '0 0 40px rgba(0,102,204,0.2)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(0,51,102,0.5)'
+              e.currentTarget.style.boxShadow   = 'none'
+            }}
+          >
+            <div style={{ height: '3px', background: 'linear-gradient(90deg,#003fa3,#0066cc,#33aaff)' }} />
+            {/* Image area — replace src with your actual image path */}
+            <div style={{
+              width: '100%',
+              aspectRatio: '16/9',
+              background: 'rgba(0,20,50,0.8)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderBottom: '1px solid rgba(0,51,102,0.4)',
+              overflow: 'hidden',
+              position: 'relative',
+            }}>
+              <Image
+                src="/images/process-preview.png"
+                alt="Our Process"
+                fill
+                style={{ objectFit: 'cover', opacity: 0.85 }}
+                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+              />
+              {/* Fallback label shown when no image is set */}
+              <span style={{
+                position: 'absolute',
+                fontSize: '11px',
+                fontWeight: 600,
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                color: 'rgba(51,170,255,0.5)',
+              }}>
+                
+              </span>
+            </div>
+            <div className="p-5 flex items-center justify-between">
+              <div className="text-left">
+                <span className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: '#0066cc' }}>
+                  Documentation
+                </span>
+                <h3 className="font-bold mt-1" style={{ fontSize: '1.25rem', lineHeight: 1.1, color: '#ffffff' }}>
+                  View Our Process
+                </h3>
+                <p className="mt-1 text-[11px] leading-relaxed" style={{ color: '#8899bb' }}>
+                  Priority Lists, Technical Requirements, Robot Dashboard
+                </p>
+              </div>
+              <ArrowIcon />
+            </div>
+          </Link>
+
+          {/* ── Learn About Our Team ── */}
+          <Link
+            href="/team"
+            className="w-3/4 rounded-2xl overflow-hidden"
+            style={{
+              background: 'rgba(0, 10, 28, 0.85)',
+              backdropFilter: 'blur(16px)',
+              border: '1px solid rgba(0, 51, 102, 0.5)',
+              textDecoration: 'none',
+              display: 'block',
+              transition: 'border-color 0.3s, box-shadow 0.3s',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(0,153,255,0.6)'
+              e.currentTarget.style.boxShadow   = '0 0 40px rgba(0,102,204,0.2)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(0,51,102,0.5)'
+              e.currentTarget.style.boxShadow   = 'none'
+            }}
+          >
+            <div style={{ height: '3px', background: 'linear-gradient(90deg,#003fa3,#0066cc,#33aaff)' }} />
+            {/* Image area — replace src with your actual image path */}
+            <div style={{
+              width: '100%',
+              aspectRatio: '16/9',
+              background: 'rgba(0,20,50,0.8)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderBottom: '1px solid rgba(0,51,102,0.4)',
+              overflow: 'hidden',
+              position: 'relative',
+            }}>
+              {/* <Image
+                src="/images/team-preview.png"
+                alt="Our Team"
+                fill
+                style={{ objectFit: 'cover', opacity: 0.85 }}
+                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+              /> */}
+              <span style={{
+                position: 'absolute',
+                fontSize: '11px',
+                fontWeight: 600,
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                color: 'rgba(51,170,255,0.5)',
+              }}>
+                UNDER CONSTRUCTION
+              </span>
+            </div>
+            <div className="p-5 flex items-center justify-between">
+              <div className="text-left">
+                <span className="text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: '#0066cc' }}>
+                  Outreach
+                </span>
+                <h3 className="font-bold mt-1" style={{ fontSize: '1.25rem', lineHeight: 1.1, color: '#ffffff' }}>
+                  Learn About Our Team
+                </h3>
+                <p className="mt-1 text-[11px] leading-relaxed" style={{ color: '#8899bb' }}>
+                  Community involvement, mentorship, and team culture.
+                </p>
+              </div>
+              <ArrowIcon />
+            </div>
+          </Link>
         </section>
 
       </div>
