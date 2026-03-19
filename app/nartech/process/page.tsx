@@ -45,13 +45,7 @@ interface SheetImage {
 }
 
 const REQUIREMENT_SHEETS: SheetImage[] = [
-  {
-    src: '/images/process/functional-requirements.png',
-    title: 'Functional Requirements Overview',
-    description: 'Top-level requirements mapping game objectives to robot capabilities and subsystem responsibilities.',
-    aspect: 'wide',
-    pill: 'Overview',
-  },
+  <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQKoGEHYikY_UCQVc-s1BIt28nSTdeFaLmIYBbfoP4ey84TZ9VkrzINyoCb4D8M40CZw0iJAkriEoqD/pubhtml?widget=true&amp;headers=false"></iframe>
 ]
 
 const DASHBOARD_SHEETS: SheetImage[] = [
