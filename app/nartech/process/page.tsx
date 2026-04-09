@@ -36,7 +36,7 @@ const REQUIREMENT_SHEETS: SheetEmbed[] = [
     title: 'Functional Requirements',
     description:
       'Specific requirements for robot design and performance defined by Strategy',
-    aspect: 'tall',
+    aspect: 'wide',
     pill: 'Requirements',
   },
 ]
