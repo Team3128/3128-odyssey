@@ -775,7 +775,7 @@ export default function TechnicalBinder() {
 
           {/* ── Learn About Our Team ── */}
           <Link
-            href="/nartech/team"
+            href="/nartech/outreach"
             className="w-3/4 rounded-2xl overflow-hidden"
             style={{
               background: 'rgba(0, 10, 28, 0.85)',

@@ -40,4 +40,7 @@ body {
   color: #58d9fde0;
   font-family: "Urbanist", sans-serif;
 }
+* {
+  caret-color: transparent;
+}
 
