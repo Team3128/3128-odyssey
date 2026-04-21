@@ -218,40 +218,6 @@ const SUBSYSTEM_DATA: Record<string, SubsystemData> = {
       'Hex axle contact force is passive — silicone tubing tension self-adjusts',
     ],
   },
-  climber: {
-    id: 'climber',
-    label: 'Climber',
-    category: 'Endgame',
-    modelPath: '/models/subsystems/climber.gltf',
-    description:
-      'The Climber functions on an elevator that serves as the backbone for the shooter, pulling the robot up as the elevator comes down. Steel hooks resist deformation under full robot weight, with Dyneema rope providing high-strength tensioning.',
-    cameraZ: 8,
-    baseRotationY: -Math.PI / 4,
-    specGroups: [
-      {
-        groupLabel: 'Elevator',
-        items: [
-          'L1 climb',
-          '2 constant force springs pulling up on the carriage, resetting it on a hardstop',
-          '2 steel hooks (steel prevents warping over time due to robot weight)',
-          'Extension of hooks is servo controlled due to the lack of needed movement',
-          'Dyneema rope is used to tension the hooks',
-        ],
-      },
-    ],
-    imageCards: [
-      // { src: '/images/subsystems/climber/elevator-full.png',   caption: 'Full elevator assembly extended',             category: 'process'   },
-      // { src: '/images/subsystems/climber/hooks-detail.png',    caption: 'Steel hook and Dyneema rope attachment',      category: 'process'   },
-      // { src: '/images/subsystems/climber/dashboard.png',       caption: 'Climber height telemetry on dashboard',       category: 'dashboard' },
-      { src: '/images/subsystems/climber/climber-state-machine.png',    caption: 'Climber State Machine',           category: 'controls'  },
-    ],
-    controlsNotes: [
-      // 'Climb sequence is semi-automated — driver confirms each stage with a button hold',
-      // 'Elevator uses motion-profiled position control to avoid shock loading hooks',
-      // 'Servo hook deployment is triggered automatically at target bar height',
-      // 'Constant force springs reset carriage passively — no motor power needed on retract',
-    ],
-  },
 }
 
 // ─── Image placeholder component ─────────────────────────────────────────────

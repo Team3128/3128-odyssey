@@ -184,34 +184,6 @@ const SUBSYSTEMS: Subsystem[] = [
     },
     robotRotationZ: -3.7 * Math.PI / 3,
   },
-  {
-    id: 'climber',
-    label: 'Climber',
-    category: 'Endgame',
-    description: 'The Climber functions on an elevator that serves as the backbone for the shooter, pulling the robot up as the elevator comes down.',
-    specGroups: [
-      {
-        groupLabel: 'Elevator',
-        items: [
-          'L1 climb',
-          '2 constant force springs pulling up on the carriage, resetting it on a hardstop',
-          '2 steel hooks (steel prevents warping over time due to robot weight)',
-          'Extension of hooks is servo controlled due to the lack of needed movement',
-          'Dyneema rope is used to tension the hooks',
-        ],
-      },
-    ],
-    align: 'left',
-    camera: {
-      position: { x: -4, y: 3, z: 5 },
-      lookAt: { x: 0, y: 1.5, z: 0 },
-    },
-    cameraVertical: {
-      position: { x: 1, y: 4, z: 6 },
-      lookAt: { x: 1, y: 3, z: 0 },
-    },
-    robotRotationZ: -Math.PI / 2 + Math.PI / 6,
-  },
 ]
 
 // ─── Constants ────────────────────────────────────────────────────────────────
