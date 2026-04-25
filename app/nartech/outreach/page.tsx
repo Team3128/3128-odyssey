@@ -1,25 +1,39 @@
+import NumbersSection from "./numbers"
+
 export default function OutreachPage() {
   return (
     <div className="min-h-screen bg-[#000d1a] text-white">
 
-      {/* ───────────────── HERO ───────────────── */}
-      <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
-        
-        {/* Hero Image Placeholder */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-[#000d1a]">
-          <img src="/public/images/team.png"></img>
-        </div>
+    <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
+  
+  {/* Background Image */}
+  <div className="absolute inset-0">
+    <img
+      src="/images/team.png"
+      className="w-full h-full object-cover"
+      alt="team"
+    />
+    
+    {/* Dark overlay for base contrast */}
+    <div className="absolute inset-0 bg-black/50" />
+  </div>
 
-        <div className="relative z-10 text-center px-6">
-          <h1 className="text-5xl md:text-6xl font-bold tracking-wide">
-            Outreach
-          </h1>
-          <p className="mt-4 text-gray-300 max-w-2xl mx-auto">
-            Community engagement, STEM education, and impact-driven programs
-            that bring robotics to students of all ages.
-          </p>
-        </div>
-      </section>
+  {/* Glass Content */}
+  <div className="relative z-10 px-6">
+    <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl px-10 py-8 shadow-xl text-center max-w-2xl mx-auto">
+      
+      <h1 className="text-5xl md:text-6xl font-bold tracking-wide text-white">
+        Outreach
+      </h1>
+
+      <p className="mt-4 text-gray-200">
+        Community engagement, STEM education, and impact-driven programs
+        that bring robotics to students of all ages.
+      </p>
+
+    </div>
+  </div>
+</section>
 
       {/* ───────────────── CONTENT ───────────────── */}
       <div className="max-w-6xl mx-auto px-6 md:px-16 py-20 space-y-24">
@@ -44,33 +58,19 @@ export default function OutreachPage() {
             </ul>
           </div>
 
-          {/* Image Placeholder */}
-          <div className="aspect-video rounded-2xl border border-blue-900/50 bg-blue-950/20 flex items-center justify-center text-gray-500 text-xs tracking-[0.3em] uppercase">
-            Summer Camp Image
-          </div>
+<div className="rounded-2xl overflow-hidden border border-white/10 bg-blue-950/20">
+  <img
+    src="/images/camp.png"
+    alt="Summer Camp"
+    className="w-full h-auto object-contain"
+  />
+</div>
 
-        </section>
+</section>
 
-        {/* BY THE NUMBERS */}
-        <section className="grid md:grid-cols-2 gap-10 items-center">
-
-          {/* Image Placeholder */}
-          <div className="aspect-video rounded-2xl border border-blue-900/50 bg-blue-950/20 flex items-center justify-center text-gray-500 text-xs tracking-[0.3em] uppercase">
-            Stats / Camp Photos
-          </div>
-
-          <div>
-            <h2 className="text-3xl font-bold mb-4">By the Numbers</h2>
-            <div className="text-gray-300 space-y-2">
-              <p>• 3 weeks per year</p>
-              <p>• 170 enrollments in 2025</p>
-              <p>• ~500 enrollments in the last three years</p>
-              <p>• 2000+ volunteer hours</p>
-              <p>• $77,207 generated from summer camp</p>
-            </div>
-          </div>
-
-        </section>
+<section>
+  <NumbersSection />
+</section>
 
         {/* SCHOLARSHIPS */}
         <section className="grid md:grid-cols-2 gap-10 items-center">
@@ -84,19 +84,27 @@ export default function OutreachPage() {
             </p>
           </div>
 
-          <div className="aspect-video rounded-2xl border border-blue-900/50 bg-blue-950/20 flex items-center justify-center text-gray-500 text-xs tracking-[0.3em] uppercase">
-            Scholarship Impact Image
-          </div>
+<div className="rounded-2xl overflow-hidden border border-white/10 bg-blue-950/20">
+  <img
+    src="/images/seniors.png"
+    alt="Our Graduating Seniors From the 2024-2025 Season"
+    className="w-full h-auto object-contain"
+  />
+</div>
 
         </section>
 
         {/* FUNDING */}
         <section className="grid md:grid-cols-2 gap-10 items-center">
 
-          <div className="aspect-video rounded-2xl border border-blue-900/50 bg-blue-950/20 flex items-center justify-center text-gray-500 text-xs tracking-[0.3em] uppercase">
-            Finance / Fundraising Image
-          </div>
-
+    
+<div className="rounded-2xl overflow-hidden border border-white/10 bg-blue-950/20">
+  <img
+    src="/images/finance.png"
+    alt="Finance Chart"
+    className="w-full h-auto object-contain"
+  />
+</div>
           <div>
             <h2 className="text-3xl font-bold mb-4">Fundraising & Finances</h2>
             <div className="text-gray-300 space-y-2">
@@ -121,19 +129,26 @@ export default function OutreachPage() {
             </p>
           </div>
 
-          <div className="aspect-video rounded-2xl border border-blue-900/50 bg-blue-950/20 flex items-center justify-center text-gray-500 text-xs tracking-[0.3em] uppercase">
-            Accessibility Program Image
-          </div>
-
+<div className="rounded-2xl overflow-hidden border border-white/10 bg-blue-950/20">
+  <img
+    src="/images/accessibility.png"
+    alt="Accessibility Program for the Hard of Hearing"
+    className="w-full h-auto object-contain"
+  />
+</div>
         </section>
 
         {/* COMMUNITY */}
         <section className="grid md:grid-cols-2 gap-10 items-center">
 
-          <div className="aspect-video rounded-2xl border border-blue-900/50 bg-blue-950/20 flex items-center justify-center text-gray-500 text-xs tracking-[0.3em] uppercase">
-            Community Events Image
-          </div>
-
+    
+<div className="rounded-2xl overflow-hidden border border-white/10 bg-blue-950/20">
+  <img
+    src="/images/community.png"
+    alt="Accessibility Program for the Hard of Hearing"
+    className="w-full h-auto object-contain"
+  />
+</div>
           <div>
             <h2 className="text-3xl font-bold mb-4">Community Engagement</h2>
             <div className="text-gray-300 space-y-2">
@@ -158,18 +173,30 @@ export default function OutreachPage() {
             </p>
           </div>
 
-          <div className="aspect-video rounded-2xl border border-blue-900/50 bg-blue-950/20 flex items-center justify-center text-gray-500 text-xs tracking-[0.3em] uppercase">
-            Strategy Content Image
-          </div>
+      
+          <div className="rounded-2xl overflow-hidden border border-white/10 bg-blue-950/20">
+  <img
+    src="/images/stratWorkshop.png"
+    alt="Poster for Strategy Workshops We Hosted"
+    className="w-full h-auto object-contain"
+  />
+</div>
 
         </section>
 
         {/* SCOUTING */}
         <section className="grid md:grid-cols-2 gap-10 items-center">
 
-          <div className="aspect-video rounded-2xl border border-blue-900/50 bg-blue-950/20 flex items-center justify-center text-gray-500 text-xs tracking-[0.3em] uppercase">
-            Scouting Alliance Image
-          </div>
+    
+              
+  <div className="rounded-2xl overflow-hidden border border-white/10 bg-blue-950/20">
+  <img
+    src="/images/scouting.png"
+    alt="Our Scouting App Suite that won us the Scouting Award at Beach Blitz in 2024"
+    className="w-full h-auto object-contain"
+  />
+</div>
+          
 
           <div>
             <h2 className="text-3xl font-bold mb-4">Scouting Alliance</h2>
