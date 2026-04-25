@@ -2,7 +2,7 @@ import NumbersSection from "./numbers"
 
 export default function OutreachPage() {
   return (
-    <div className="min-h-screen bg-[#000d1a] text-white">
+    <div className="min-h-screen bg-[#000d1a] text-white relative overflow-hidden">
 
     <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
   
