@@ -807,13 +807,13 @@ export default function TechnicalBinder() {
               overflow: 'hidden',
               position: 'relative',
             }}>
-              {/* <Image
-                src="/images/team-preview.png"
+              { <Image
+                src="/images/team.png"
                 alt="Our Team"
                 fill
                 style={{ objectFit: 'cover', opacity: 0.85 }}
                 onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
-              /> */}
+              /> }
               <span style={{
                 position: 'absolute',
                 fontSize: '11px',
@@ -822,7 +822,6 @@ export default function TechnicalBinder() {
                 textTransform: 'uppercase',
                 color: 'rgba(51,170,255,0.5)',
               }}>
-                UNDER CONSTRUCTION
               </span>
             </div>
             <div className="p-5 flex items-center justify-between">
