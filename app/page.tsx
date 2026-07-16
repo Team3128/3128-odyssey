@@ -73,13 +73,13 @@ export default function OdysseyPage() {
       willChange: "transform",
     }}
   >
-    <Image
+    {/* <Image
       src="/wave.png"
       alt="Wave background"
       fill
       priority
       className="object-cover"
-    />
+    /> */}
   </div>
 
   {/* Foreground tex */}
