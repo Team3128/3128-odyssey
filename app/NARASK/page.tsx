@@ -1,21 +1,14 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Menu, ChevronDown, ChevronRight, Copy, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import dynamic from "next/dynamic";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import dynamic from "next/dynamic";
 
-// Dynamically import react-pdf to avoid SSR issues
-const Document = dynamic(
-  () => import("react-pdf").then((mod) => mod.Document),
-  { ssr: false }
-);
-const Page = dynamic(
-  () => import("react-pdf").then((mod) => mod.Page),
-  { ssr: false }
-);
+import Header from "../components/narask/Header";
+import Sidebar from "../components/narask/Sidebar";
+import MarkdownViewer from "../components/narask/MarkdownViewer";
 
 type MdFile = {
   name: string;
@@ -31,10 +24,6 @@ type Section = {
 
 type SectionsMap = Record<string, Section[]>;
 
-type PdfFile = {
-  name: string;
-  url: string;
-};
 
 // highlight component
 const Highlight = ({ text, query }: { text: string; query: string }) => {
@@ -56,8 +45,6 @@ const Highlight = ({ text, query }: { text: string; query: string }) => {
 };
 
 export default function NaraskPage() {
-  // --- TABS ---
-  const [activeTab, setActiveTab] = useState<"software" | "barketing">("software");
 
   // --- SOFTWARE STATE ---
   const [mdFiles, setMdFiles] = useState<MdFile[]>([]);
@@ -77,30 +64,11 @@ export default function NaraskPage() {
   const [mode, setMode] = useState<"new" | "append">("new");
   const [selectedFile, setSelectedFile] = useState<string>("");
   
-  const [uploadPdfOpen, setUploadPdfOpen] = useState(false);
-  const [pdfUploading, setPdfUploading] = useState(false);
 
   const sidebarRef = useRef<HTMLDivElement>(null);
   const howToFile = { name: "How To Add Docs", slug: "howto", path: "/md_files/howto.md" };
 
-  // --- BARKETING STATE ---
-  const [pdfFiles, setPdfFiles] = useState<PdfFile[]>([]);
-  const [selectedPdf, setSelectedPdf] = useState<PdfFile | null>(null);
-
-  // --- LOAD PDFs ---
-  useEffect(() => {
-    const loadPdfs = async () => {
-      try {
-        const res = await fetch("/api/barketing/listPdfs");
-        const data = await res.json();
-        if (data.success) setPdfFiles(data.files);
-      } catch (err) {
-        console.error("Failed to load PDFs:", err);
-      }
-    };
-    loadPdfs();
-  }, []);
-  
+ 
   useEffect(() => {
   if (mode !== "append" || !selectedFile) return;
 
@@ -265,168 +233,21 @@ useEffect(() => {
       alert("Error saving documentation");
     }
   };
-const uploadPdf = async (file: File) => {
-  setPdfUploading(true);
 
-  const formData = new FormData();
-  formData.append("file", file);
-
-  try {
-    const res = await fetch("/api/barketing/uploadPdf", {
-      method: "POST",
-      body: formData,
-    });
-
-    const result = await res.json();
-    if (!result.success) throw new Error(result.error || "Upload failed");
-
-    alert("PDF uploaded successfully!");
-
-    // Refresh PDF list
-    const refresh = await fetch("/api/barketing/listPdfs");
-    const data = await refresh.json();
-    if (data.success) setPdfFiles(data.files);
-
-    setUploadPdfOpen(false);
-  } catch (err: any) {
-    console.error(err);
-    alert("PDF upload failed: " + err.message);
-  } finally {
-    setPdfUploading(false);
-  }
-};
 
 
 
   return (
     <div className="min-h-screen relative bg-black p-8 text-white">
-      <AnimatePresence>
-  {uploadPdfOpen && (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
-    >
-      <motion.div
-        initial={{ scale: 0.9 }}
-        animate={{ scale: 1 }}
-        exit={{ scale: 0.9 }}
-        className="bg-gray-900 p-6 rounded-2xl w-full max-w-xl text-white relative"
-      >
-        <button
-          className="absolute top-3 right-3 text-gray-400 hover:text-white"
-          onClick={() => setUploadPdfOpen(false)}
-        >
-          ✕
-        </button>
-
-        <h2 className="text-2xl font-bold mb-4">Upload Barketing PDF</h2>
-
-<div
-  className="border-2 border-dashed border-gray-600 rounded-xl p-10 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500"
-  onDragOver={(e) => e.preventDefault()} // allow drop
-  onDrop={(e) => {
-    e.preventDefault();
-    if (e.dataTransfer.files.length === 0) return;
-    const file = e.dataTransfer.files[0];
-    if (file.type !== "application/pdf") {
-      alert("Only PDFs are allowed.");
-      return;
-    }
-    uploadPdf(file);
-  }}
-  onClick={() => document.getElementById("barketing-pdf-upload")?.click()} // click to open file picker
->
-  <span className="text-gray-300 mb-4">
-    Drag & drop a PDF here or click to browse
-  </span>
-
-  <input
-    type="file"
-    accept="application/pdf"
-    className="hidden"
-    id="barketing-pdf-upload"
-    onChange={(e) => {
-      if (!e.target.files?.length) return;
-      const file = e.target.files[0];
-      if (file.type !== "application/pdf") {
-        alert("Only PDFs are allowed.");
-        return;
-      }
-    uploadPdf(e.target.files[0]); 
-    }}
-  />
-</div>
-
-
-        {pdfUploading && (
-          <p className="mt-4 text-blue-400">Uploading…</p>
-        )}
-      </motion.div>
-    </motion.div>
-  )}
-</AnimatePresence>
-      {/* Header */}
-      <header className="flex flex-col items-center gap-6 mb-8 relative">
-        <button onClick={() => setMenuOpen(!menuOpen)} className="absolute left-0 top-0 p-2">
-          <Menu className="w-7 h-7" />
-        </button>
-
-        {/* Tabs */}
-        <div className="flex">
-          <button
-            onClick={() => setActiveTab("software")}
-            className={`px-6 py-2 bg-black relative ${
-              activeTab === "software"
-                ? "after:block after:absolute after:-bottom-1 after:left-0 after:w-full after:h-1 after:bg-white"
-                : ""
-            }`}
-          >
-            Software
-          </button>
-          <button
-            onClick={() => setActiveTab("barketing")}
-            className={`px-6 py-2 bg-black relative ${
-              activeTab === "barketing"
-                ? "after:block after:absolute after:-bottom-1 after:left-0 after:w-full after:h-1 after:bg-white"
-                : ""
-            }`}
-          >
-            Barketing
-          </button>
-        </div>
-
-        <h1 className="text-4xl font-bold text-center">NARASK</h1>
-
-    <button
-  onClick={() => {
-    if (activeTab === "software") {
-      setAddDocOpen(true);
-    } else {
-      setUploadPdfOpen(true);
-    }
-  }}
-  className="absolute right-0 top-0 flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-full font-semibold shadow-lg transition"
->
-  <Plus size={18} />
-  {activeTab === "software" ? "Add Documentation" : "Upload PDF"}
-</button>
-
-        <div className="w-full max-w-3xl relative group">
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search..."
-            className="relative border rounded-full border-gray-700 px-4 py-2 w-full text-white bg-black focus:outline-none"
-          />
-        </div>
-      </header>
+   
+  
+  <Header
+  setMenuOpen={setMenuOpen}
+  openAddDoc={() => setAddDocOpen(true)}
+/>
 
       {/* SOFTWARE SECTION */}
-      {activeTab === "software" && (
-        <>
+        
           {/* Add Documentation Modal */}
           <AnimatePresence>
             {addDocOpen && (
@@ -498,7 +319,7 @@ const uploadPdf = async (file: File) => {
                         >
                           <option value="">Select file to append</option>
                           {mdFiles.map((f) => (
-                            <option key={f.path} value={f.path}>
+                            <option key={f.path} value={f.slug}>
                               {f.name}
                             </option>
 
@@ -523,62 +344,28 @@ const uploadPdf = async (file: File) => {
             )}
           </AnimatePresence>
 
-          {/* Sidebar */}
-          <aside
-            ref={sidebarRef}
-            className={`fixed top-0 left-0 h-full w-72 bg-black p-6 transform transition-transform duration-500 ease-in-out z-50 overflow-y-auto ${
-              menuOpen ? "translate-x-0" : "-translate-x-full"
-            }`}
-          >
-            <h3 className="text-lg font-semibold mb-4">Sections</h3>
-            {mdFiles.map((file) => (
-              <div key={file.slug} className="mb-4">
-                <button
-                  className="flex items-center justify-between w-full text-left font-semibold py-2 hover:text-blue-400"
-                  onClick={() => {
-                    setActiveFilter(file.slug);
-                    setExpandedFiles((prev) => new Set(prev.add(file.slug)));
-                    setOpenDropdown(openDropdown === file.slug ? null : file.slug);
-                    setTimeout(() => document.getElementById(file.slug)?.scrollIntoView({ behavior: "smooth", block: "start" }), 300);
-                  }}
-                >
-                  {file.name}
-                  {openDropdown === file.slug ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
-                </button>
-
-                <AnimatePresence>
-                  {openDropdown === file.slug && sections[file.slug] && (
-                    <motion.ul
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="pl-4 mt-2 space-y-2 text-gray-300"
-                    >
-                      {sections[file.slug].map((sec, idx) => (
-                        <li
-                          key={idx}
-                          className="cursor-pointer hover:text-blue-400"
-                          onClick={() => {
-                            const sectionId = `${file.slug}-section-${idx}`;
-                            setActiveFilter(file.slug);
-                            setExpandedFiles((prev) => new Set(prev.add(file.slug)));
-                            setExpandedSections((prev) => new Set(prev.add(sectionId)));
-                            setTimeout(() => document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth", block: "start" }), 300);
-                          }}
-                        >
-                          {sec.heading}
-                        </li>
-                      ))}
-                    </motion.ul>
-                  )}
-                </AnimatePresence>
-              </div>
-            ))}
-          </aside>
+   <Sidebar
+  mdFiles={mdFiles}
+  sections={sections}
+  menuOpen={menuOpen}
+  setMenuOpen={setMenuOpen}
+  openDropdown={openDropdown}
+  setOpenDropdown={setOpenDropdown}
+  setActiveFilter={setActiveFilter}
+  setExpandedFiles={setExpandedFiles}
+  setExpandedSections={setExpandedSections}
+  sidebarRef={sidebarRef}
+/>
 
 {/* Filters & Results */}
 <div className="w-full max-w-full mx-auto mt-6">
+  <input
+  type="text"
+  placeholder="Search documentation..."
+  value={search}
+  onChange={(e) => setSearch(e.target.value)}
+  className="w-full mb-4 px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+/>
   {/* Filters */}
   <div className="flex border-gray-700">
     {mdFiles.map((file) => (
@@ -593,138 +380,19 @@ const uploadPdf = async (file: File) => {
       </button>
     ))}
   </div>
+<MarkdownViewer
+  sections={sections}
+  expandedFiles={expandedFiles}
+  expandedSections={expandedSections}
+  search={search}
+  markdownComponents={markdownComponents}
+  displayCards={displayCards}
+  setExpandedSections={setExpandedSections}
+  setExpandedFiles={setExpandedFiles}
+/>
 
-  {/* Results */}
-  <div className="mt-4 space-y-6">
-    {displayCards.length > 0 ? (
-      displayCards.map((card, idx) =>
-        card.type === "file" ? (
-          <div key={idx} className="bg-gray-900 p-4 rounded-lg border border-gray-700">
-            <h3
-              className="font-semibold text-lg cursor-pointer flex justify-between items-center"
-              onClick={() => {
-                const expanded = new Set(expandedFiles);
-                if (expanded.has(card.file.slug)) expanded.delete(card.file.slug);
-                else expanded.add(card.file.slug);
-                setExpandedFiles(expanded);
-              }}
-            >
-              {card.file.name}
-              {expandedFiles.has(card.file.slug) ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-            </h3>
-
-            {/* Expand sections inside file */}
-            <AnimatePresence>
-              {expandedFiles.has(card.file.slug) && sections[card.file.slug] && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="mt-3 space-y-4"
-                >
-                  {sections[card.file.slug].map((section, secIdx) => {
-                    const sectionId = `${card.file.slug}-section-${secIdx}`;
-                    return (
-                      <div
-                        key={sectionId}
-                        id={sectionId}
-                        className="bg-gray-800 p-3 rounded-lg cursor-pointer hover:bg-gray-700"
-                        onClick={() => {
-                          const expanded = new Set(expandedSections);
-                          if (expanded.has(sectionId)) expanded.delete(sectionId);
-                          else expanded.add(sectionId);
-                          setExpandedSections(expanded);
-                        }}
-                      >
-                        <h4 className="font-semibold text-md flex justify-between items-center">
-                          <Highlight text={section.heading} query={search} />
-                          {expandedSections.has(sectionId) ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-                        </h4>
-
-                        <AnimatePresence>
-                          {expandedSections.has(sectionId) && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: "auto", opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.3 }}
-                              className="mt-2 text-sm text-gray-200"
-                            >
-                              <ReactMarkdown components={markdownComponents} remarkPlugins={[remarkGfm]}>
-                                {section.fullText}
-                              </ReactMarkdown>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    );
-                  })}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        ) : (
-          // Direct section card when filtering/searching
-          <div
-            key={idx}
-            id={`${card.file.slug}-section-${card.idx}`}
-            className="bg-gray-900 p-4 rounded-lg border border-gray-700"
-          >
-            <h4 className="font-semibold text-lg">
-              <Highlight text={card.section!.heading} query={search} />
-            </h4>
-            <p className="text-gray-300">
-              <Highlight text={card.section!.preview} query={search} />
-            </p>
-            <ReactMarkdown components={markdownComponents} remarkPlugins={[remarkGfm]}>
-              {card.section!.fullText}
-            </ReactMarkdown>
-          </div>
-        )
-      )
-    ) : (
-      <p className="text-gray-400">No results found.</p>
-    )}
-  </div>
 </div>
-</>
-      )}
-
-{/* BARKETING SECTION */}
-
-{activeTab === "barketing" && (
-  <section className="mt-8">
-    <h2 className="text-3xl font-bold mb-4">Barketing PDFs</h2>
-
-    {/* PDF List */}
-    <div className="space-y-3 mb-6">
-      {pdfFiles.map((pdf) => (
-        <div
-          key={pdf.name}
-          className="bg-gray-800 p-3 rounded cursor-pointer hover:bg-gray-700"
-          onClick={() => setSelectedPdf(pdf)}
-        >
-          {pdf.name}
-        </div>
-      ))}
-    </div>
-
-    {/* PDF Viewer */}
-    {selectedPdf && (
-      <div className="bg-gray-900 p-4 rounded-xl border border-gray-700">
-        <h3 className="text-xl font-semibold mb-2">
-          {selectedPdf.name}
-        </h3>
-
-        <iframe
-          src={selectedPdf.url}
-          className="w-full h-[800px] rounded border border-gray-700"
-        />
-      </div>
-    )}
-  </section>
-)}
+  
     </div>
   );
 }
