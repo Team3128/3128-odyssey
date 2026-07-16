@@ -49,6 +49,7 @@ export default function OdysseyPage() {
           <Link href="/narask">NARASK</Link>
           <Link href="/narpit">NARPIT</Link>
           <Link href="/nartech">NARTECH</Link>
+          {/* need to match case */}
           <a
             href="https://manta-scouting-neptune.vercel.app"
             target="_blank"
