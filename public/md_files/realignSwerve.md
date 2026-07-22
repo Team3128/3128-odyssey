@@ -9,7 +9,7 @@ Authors: Shravya Mandadi,
 
 ### Cancoder Offsets
 1. Flip robot onto its side and align wheels so the geared side faces the **right** of robot (use 2x4 or some straight object to align):
-<img src="../images/realign-swerve.png" alt="Image of wheel alignment" width="300" height="200">
+<img src="../images/realign-swerve.png" alt="Image of wheel alignment" width="300" height="400">
 
 
 
