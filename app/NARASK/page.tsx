@@ -172,13 +172,26 @@ useEffect(() => {
     ul: (props: any) => <ul className="list-disc list-inside mb-3 space-y-1" {...props} />,
     ol: (props: any) => <ol className="list-decimal list-inside mb-3 space-y-1" {...props} />,
     li: (props: any) => <li className="ml-4" {...props} />,
-    code: ({ className, children, ...props }: any) => (
-      <pre className="bg-gray-800 p-4 rounded-lg overflow-x-auto text-sm">
-        <code {...props} className={className}>
-          {children}
-        </code>
-      </pre>
-    ),
+    pre: ({ children }: any) => (
+  <pre className="bg-gray-800 p-4 rounded-lg overflow-x-auto text-sm">
+    {children}
+  </pre>
+),
+img: ({ src, alt }: any) => (
+  <img
+    src={src}
+    alt={alt}
+    height={400}
+    width={300}
+    className="rounded-lg my-4 max-w-full h-auto"
+  />
+),
+
+code: ({ className, children, ...props }: any) => (
+  <code className={className} {...props}>
+    {children}
+  </code>
+),
   };
 
 
