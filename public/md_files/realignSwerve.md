@@ -8,7 +8,10 @@ Authors: Shravya Mandadi,
 
 
 ### Cancoder Offsets
-1. Flip robot onto its side and align wheels so the geared side faces the **right** of robot (use 2x4 or some straight object to align)
+1. Flip robot onto its side and align wheels so the geared side faces the **right** of robot (use 2x4 or some straight object to align):
+![Image of wheel alignment](../images/realign-swerve.png)
+
+
 2. Uncomment this line in RobotContainer.java (or add it if it's not there) and comment out whatever other command uses `controller.getButton(kY)`: 
 ```java
          controller.getButton(kY)
