@@ -25,6 +25,8 @@ public static final double MOD1_CANCODER_OFFSET = 1.9335937499999998;
 public static final double MOD2_CANCODER_OFFSET = 176.48437500000003;
 public static final double MOD3_CANCODER_OFFSET = -11.689453125;
 ```
+![Image of constants in riolog](/images/riolog.png)
+
 5. Paste this into Constants.java and comment out old offsets
 6. Deploy robot code and press the down button the controller to re-zero gyro
 7. Done
