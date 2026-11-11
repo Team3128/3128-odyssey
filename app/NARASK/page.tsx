@@ -5,7 +5,6 @@ import { Menu, ChevronDown, ChevronRight, Copy, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Document, Page } from "react-pdf";
 
 type MdFile = {
   name: string;
@@ -74,19 +73,7 @@ export default function NaraskPage() {
   const [pdfFiles, setPdfFiles] = useState<PdfFile[]>([]);
   const [selectedPdf, setSelectedPdf] = useState<PdfFile | null>(null);
 
-  // --- LOAD PDFs ---
-  useEffect(() => {
-    const loadPdfs = async () => {
-      try {
-        const res = await fetch("/api/barketing/listPdfs");
-        const data = await res.json();
-        if (data.success) setPdfFiles(data.files);
-      } catch (err) {
-        console.error("Failed to load PDFs:", err);
-      }
-    };
-    loadPdfs();
-  }, []);
+  
 
   const handleUploadPdf = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return;
@@ -557,37 +544,8 @@ export default function NaraskPage() {
         </>
       )}
 
-      {/* BARKETING SECTION */}
-      {activeTab === "barketing" && (
-        <section className="mt-8">
-          <h2 className="text-3xl font-bold mb-4">Barketing Documentation</h2>
-          <label className="block mb-4 cursor-pointer">
-            <span className="bg-blue-600 px-4 py-2 rounded">Upload PDF</span>
-            <input type="file" accept="application/pdf" onChange={handleUploadPdf} className="hidden" />
-          </label>
-          <div className="space-y-3">
-            {pdfFiles.map((pdf) => (
-              <div
-                key={pdf.name}
-                className="bg-gray-800 p-3 rounded cursor-pointer hover:bg-gray-700"
-                onClick={() => setSelectedPdf(pdf)}
-              >
-                {pdf.name}
-              </div>
-            ))}
-          </div>
-          {selectedPdf && (
-            <div className="mt-6 bg-gray-900 p-4 rounded-xl">
-              <h3 className="text-xl font-semibold mb-2">{selectedPdf.name}</h3>
-              <div className="border border-gray-700 rounded-lg overflow-hidden flex justify-center">
-                <Document file={selectedPdf.url}>
-                  <Page pageNumber={1} width={800} />
-                </Document>
-              </div>
-            </div>
-          )}
-        </section>
-      )}
+
+     
     </div>
   );
 }
