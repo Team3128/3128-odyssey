@@ -286,7 +286,7 @@ export default function ControlsPage() {
               'Shared across Position, Velocity, and Voltage subsystem types',
             ]} />
             <BulletGroup accent="blue" label="Mechanism Types" items={[
-              'Position-based — elevator, pivot, climber',
+              'Position-based — elevator, pivot',
               'Velocity-based — shooter drum',
               'Voltage-based — rollers, manipulator',
             ]} />
@@ -306,13 +306,8 @@ export default function ControlsPage() {
               accent="blue"
               pill="Superstructure"
             />
-          <ImgGrid cols={2}>
-            <ImgCard
-              src="/images/subsystems/climber/climber-state-machine.png"
-              caption="Climber state diagram"
-              accent="blue"
-              pill="Climber"
-            />
+          <ImgGrid cols={1}>
+        
             <ImgCard
               src="/images/subsystems/shooter/shooter-state-machine.png"
               caption="Shooter state diagrams"
